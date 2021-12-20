@@ -2,7 +2,7 @@
 O moddado da vez Escolher um TD (caso você não conheça, é o que significa tower defense, lembra de todos aqueles jogos que terminam em TD e você nunca entendeu o motivo, agora sabe!</description><content>&lt;p>Sou um fã de jogos do tipo &lt;em>tower defense&lt;/em> desde criança, e sempre curti ownar um ou outro para conseguir chegar em &lt;em>waves&lt;/em> ridiculamente altas, ou só pelo &lt;em>memento mori&lt;/em> que em determinado ponto, ainda que tenha um modding pesado no game, ainda acabo perdendo para &lt;em>waves&lt;/em> que literalmente fazem meu computador dizer adeus a toda sua &lt;em>heap&lt;/em>.&lt;/p>
 &lt;h1 id="o-moddado-da-vez">O &lt;em>moddado&lt;/em> da vez&lt;/h1>
 &lt;p>Escolher um TD (caso você não conheça, é o que significa &lt;em>tower defense&lt;/em>, lembra de todos aqueles jogos que terminam em TD e você nunca entendeu o motivo, agora sabe!) de qualidade hoje em dia é muito difícil, para minha tristeza e de diversos jogadores mais saudosistas, esse é um dos gêneros de jogos que estão totalmente sem popularidade, ou na maioria das vezes é encarado somente como um &lt;em>minigame&lt;/em> chato dentro de algum jogo maior.&lt;/p>
-&lt;p>Sem sombra de dúvidas o GOAT dos TDs sempre vai ser os primórdios de Warcraft 2 (esse não tinha algo dedicado ao &lt;em>Element&lt;/em>, mas tinha umas paradas doidas) e Warcraft 3, que efetivamente marcou o nome &lt;em>Element&lt;/em>, com os mapas montados para serem jogados como TD, perdi facilmente centenas de horas da minha infância e adolescência neles (atualmente não perco mais tempo neles, considero investimento). Felizmente no mundo estranho em que vivemos atualmente, ainda disponhamos de um bom lançamento para somar na cena de jogos TD: A continuação de &lt;em>Element TD&lt;/em>, com um título para lá de óbvio, &lt;em>Element TD 2&lt;/em>.&lt;/p>
+&lt;p>Sem sombra de dúvidas o GOAT dos TDs sempre vai ser os primórdios de Warcraft 2 (esse não tinha algo dedicado ao &lt;em>Element&lt;/em>, mas tinha umas paradas doidas) e Warcraft 3, que efetivamente marcou o nome &lt;em>Element&lt;/em>, com os mapas montados para serem jogados como TD, perdi facilmente centenas de horas da minha infância e adolescência neles (atualmente não perco mais, considero investimento). Felizmente no mundo estranho em que vivemos atualmente, ainda disponhamos de um bom lançamento para somar na cena de jogos TD: A continuação de &lt;em>Element TD&lt;/em>, com um título para lá de óbvio, &lt;em>Element TD 2&lt;/em>.&lt;/p>
 &lt;blockquote>
 &lt;p>&lt;strong>Nota&lt;/strong>: O jogo utiliza Unity, e também o famoso (e chato de mais) &lt;em>il2cpp&lt;/em>, que para um jogo sem o devido cuidado na hora de fazer o código intermediário da CLR virar essa gambiarra grotesca de nativo, é relativamente fácil de ser modificado. Ainda sim, sou a favor de moddings mais amigos do binário, isso é, que efetivamente não o altera, então só vamos fuçar em estruturas de memória e alguns padrões de estruturas.&lt;/p>
 &lt;p>Utilizar algum framework pronto para &lt;em>modding&lt;/em> em Unity é a melhor alternativa sempre, mas isso envolve chamar o BepInEx e alterar algumas configurações gráficas (já que o &lt;code>il2cpp&lt;/code> não tem o mesmo suporte para fazer o &lt;em>rendering&lt;/em>, por exemplo, de um IMGUI) além da própria estrutura dos arquivos e binários do jogo.&lt;/p>
@@ -42,10 +42,10 @@ label(originalcode)
 label(exit)
 alloc(_gold,8,&amp;quot;GameAssembly.dll&amp;quot;+428044)
 registersymbol(_gold)
-_Gold:
+_gold:
 dd (float)1234567890
 newmem:
-movss xmm0,[_Gold]
+movss xmm0,[_gold]
 originalcode:
 movss [rcx+00000104],xmm0
 exit:
