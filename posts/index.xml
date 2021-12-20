@@ -1,4 +1,107 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Jojo's Exceptions</title><link>https://exception.blog/posts/</link><description>Recent content in Posts on Jojo's Exceptions</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Wed, 21 Jul 2021 18:57:58 -0300</lastBuildDate><atom:link href="https://exception.blog/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>Analisando plguins wordpress em massa</title><link>https://exception.blog/posts/analisando-plugins-wordpress-em-massa/</link><pubDate>Tue, 06 Jul 2021 23:38:32 -0300</pubDate><guid>https://exception.blog/posts/analisando-plugins-wordpress-em-massa/</guid><description>Acredito que a grande maioria do pessoal que procura vulnerabilidades rentáveis dentro do mundo de aplicações web, em algum momento já passou pela stack que o WordPress fornece, seja auditando seu core, ou plugins, sendo este último o foco dessa postagem.
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Jojo's Exceptions</title><link>https://exception.blog/posts/</link><description>Recent content in Posts on Jojo's Exceptions</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sat, 18 Dec 2021 23:51:11 -0300</lastBuildDate><atom:link href="https://exception.blog/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>Code injections e uns modding em um TD</title><link>https://exception.blog/posts/code-injection-e-zueira-no-td/</link><pubDate>Sat, 18 Dec 2021 23:51:11 -0300</pubDate><guid>https://exception.blog/posts/code-injection-e-zueira-no-td/</guid><description>Sou um fã de jogos do tipo tower defense desde criança, e sempre curti ownar um ou outro para conseguir chegar em waves ridiculamente altas, ou só pelo memento mori que em determinado ponto, ainda que tenha um modding pesado no game, ainda acabo perdendo para waves que literalmente fazem meu computador dizer adeus a toda sua heap.
+O moddado da vez Escolher um TD (caso você não conheça, é o que significa tower defense, lembra de todos aqueles jogos que terminam em TD e você nunca entendeu o motivo, agora sabe!</description><content>&lt;p>Sou um fã de jogos do tipo &lt;em>tower defense&lt;/em> desde criança, e sempre curti ownar um ou outro para conseguir chegar em &lt;em>waves&lt;/em> ridiculamente altas, ou só pelo &lt;em>memento mori&lt;/em> que em determinado ponto, ainda que tenha um modding pesado no game, ainda acabo perdendo para &lt;em>waves&lt;/em> que literalmente fazem meu computador dizer adeus a toda sua &lt;em>heap&lt;/em>.&lt;/p>
+&lt;h1 id="o-moddado-da-vez">O &lt;em>moddado&lt;/em> da vez&lt;/h1>
+&lt;p>Escolher um TD (caso você não conheça, é o que significa &lt;em>tower defense&lt;/em>, lembra de todos aqueles jogos que terminam em TD e você nunca entendeu o motivo, agora sabe!) de qualidade hoje em dia é muito difícil, para minha tristeza e de diversos jogadores mais saudosistas, esse é um dos gêneros de jogos que estão totalmente sem popularidade, ou na maioria das vezes é encarado somente como um &lt;em>minigame&lt;/em> chato dentro de algum jogo maior.&lt;/p>
+&lt;p>Sem sombra de dúvidas o GOAT dos TDs sempre vai ser os primórdios de Warcraft 2 (esse não tinha algo dedicado ao &lt;em>Element&lt;/em>, mas tinha umas paradas doidas) e Warcraft 3, que efetivamente marcou o nome &lt;em>Element&lt;/em>, com os mapas montados para serem jogados como TD, perdi facilmente centenas de horas da minha infância e adolescência neles (atualmente não perco mais tempo neles, considero investimento). Felizmente no mundo estranho em que vivemos atualmente, ainda disponhamos de um bom lançamento para somar na cena de jogos TD: A continuação de &lt;em>Element TD&lt;/em>, com um título para lá de óbvio, &lt;em>Element TD 2&lt;/em>.&lt;/p>
+&lt;blockquote>
+&lt;p>&lt;strong>Nota&lt;/strong>: O jogo utiliza Unity, e também o famoso (e chato de mais) &lt;em>il2cpp&lt;/em>, que para um jogo sem o devido cuidado na hora de fazer o código intermediário da CLR virar essa gambiarra grotesca de nativo, é relativamente fácil de ser modificado. Ainda sim, sou a favor de moddings mais amigos do binário, isso é, que efetivamente não o altera, então só vamos fuçar em estruturas de memória e alguns padrões de estruturas.&lt;/p>
+&lt;p>Utilizar algum framework pronto para &lt;em>modding&lt;/em> em Unity é a melhor alternativa sempre, mas isso envolve chamar o BepInEx e alterar algumas configurações gráficas (já que o &lt;code>il2cpp&lt;/code> não tem o mesmo suporte para fazer o &lt;em>rendeting&lt;/em>, por exemplo, de um IMGUI) além da própria estrutura dos arquivos e binários do jogo.&lt;/p>
+&lt;/blockquote>
+&lt;p>Quem jogou os clássicos mapas dos jogos primordiais, não deve se estranhar em notar uma forte semelhança com o que vemos em &lt;em>Element TD 2&lt;/em>, lançado no dia 2 de Abril desse ano, ao menos oficialmente, sua versão de &lt;em>early access&lt;/em> esteve no ar desde o começo do ano passado. Uma observação interessante, caso você conheça as rinhas de galinha japonesas legalizadas, popularizado sobre o nome Pokémon, vai ter uma facilidade para jogar esse game, por conta das fraquezas de certos elementos contra outros de tipos distintos.&lt;/p>
+&lt;h1 id="jogando-na-moral-ou-quase">Jogando na moral (ou quase)&lt;/h1>
+&lt;p>Para facilitar um pouco a brincadeira, vou iniciar no modo de sobrevivência na dificuldade normal, para podermos analisar com calma o que nos aguarda dentro do jogo. Não vou fazer nenhuma bizarrice em engenharia reversa, o jogo é &lt;em>indie&lt;/em>, ainda que tenha uma comunidade fiel e antiga por de trás, então caso queira brincar mais afundo no que foi implementado dentro da &lt;em>engine&lt;/em>, compre-o, e ainda por cima ajude a crescer conteúdo por aí.&lt;/p>
+&lt;p>O mapa é bem genérico para os padrões de TD, com algumas novidades, além de poder &lt;em>combar&lt;/em> certas skills e torres, o jogo coloca uma dificuldade (que é &lt;strong>muito&lt;/strong> alta, porém artificial) elevada ao revelar certos caminhos até à base em &lt;em>blind spots&lt;/em> no mapa. Ainda sim é bem divertido para quem gosta de uma boa lógica e tem uma mão rápida no teclado, mouse e uma boa memória nas &lt;em>hotkeys&lt;/em>. Enfim, eis uma breve tela do jogo em ação:&lt;/p>
+&lt;p>&lt;img src="https://exception.blog/static/image-20211219000854923.png" alt="O jogo em toda sua glória">&lt;/p>
+&lt;p>Existem bons elementos na UI que já trazem uma ideia de como funciona o &lt;code>Update()&lt;/code> do game, bem como a ordem das cenas ao serem invocadas e manipuladas para o bem maior do jogador. De cara, podemos enumerar uma série de coisas interessantes que podem ser feitas dentro do jogo:&lt;/p>
+&lt;ul>
+&lt;li>Patrimônio infinito, ou parametrizável;&lt;/li>
+&lt;li>Vidas infinitas;&lt;/li>
+&lt;li>Caminho entre os portais;&lt;/li>
+&lt;li>Velocidade de locomoção do player;&lt;/li>
+&lt;li>&lt;em>Cooldown&lt;/em> de construção, destruição e evolução das torres; e&lt;/li>
+&lt;li>Movimento e vida dos &lt;em>minions&lt;/em> dentro do mapa.&lt;/li>
+&lt;/ul>
+&lt;p>Devem haver outras centenas de coisas que devem ser triviais para serem feitas, mas vamos nos focar em algumas da lista acima. Para começar, vamos dar uma olhada em como o &lt;em>gold&lt;/em> (que é diferente do patrimônio) funciona dentro do game. Existem alguns bons &lt;em>opcodes&lt;/em> que compartilham o acesso a mesma chamada de função dentro do &lt;code>Update()&lt;/code>, entretanto, podemos utilizar esse comportamento de acesso ao endereço de memória que corresponde ao &lt;em>gold&lt;/em> para literalmente mapear qualquer outra estrutura nesse caso específico do &lt;em>Elements TD 2&lt;/em>.&lt;/p>
+&lt;p>Mas focando apenas no que ocorre quando uma determinada função ocorre, que é exatamente aquela dentro do &lt;em>loop&lt;/em> do jogo:&lt;/p>
+&lt;pre>&lt;code class="language-assembly" data-lang="assembly">movss xmm0,[rax+104]
+call GameAssembly.dll+2052F0
+cvttss2si eax,xmm0
+add rsp,28
+ret
+&lt;/code>&lt;/pre>&lt;p>Acho que a única &lt;em>capetisse&lt;/em> que tem ai no código do &lt;em>disassembler&lt;/em> é literalmente a instrução &lt;code>cvttss2si&lt;/code> (otimizações de compiladores modernos geram coisas estranhas, mas que teoricamente são performáticas, nesse caso acaba sendo a única opção), no contexto geral, não há muito interesse nessa função, e mexer nela seria uma péssima ideia, caso você esteja curioso sobre a empregabilidade dela, de uma verificada no seu manual favorito de IA64.&lt;/p>
+&lt;p>No final das contas, a única coisa que nos interessa é o endereço de memória de &lt;code>rax&lt;/code>, que pode ser utilizado em seu &lt;em>base address&lt;/em> como mapa para diversos ponteiros de memórias, e consequentemente diversas estruturas de memórias bem interessantes do jogo. Ainda sim, para deixar as coisas mais simples, tendo em vista que diversos endereços de memória são visitados pela instrução &lt;code>movss xmm0,[rax+104]&lt;/code>, encontrar efetivamente uma caracteristicas em meio aquelas que acessam o endereço que nos interessa, o &lt;em>gold&lt;/em> própriamente dito possa ser um pé no saco.&lt;/p>
+&lt;p>Por fim podemos procurar por &lt;em>opcodes&lt;/em> que definitivamente escrevem no endereço de memória correspondente ao &lt;em>gold&lt;/em>, dessa forma a probabilidade daquela função ser reutilizada em outras estruturas da &lt;em>engine&lt;/em> do jogo é menor - mas perceba que não é nula, mais para frente vamos notar que efetivamente ocorre alguns problemas em outras estruturas de memória quando realizarmos o &lt;em>patch&lt;/em> na memória do jogo -, e por tanto mais tranquila de se alterar sem ter grandes impactos na estabilidade do processo. Que neste caso seria:&lt;/p>
+&lt;pre>&lt;code class="language-assembly" data-lang="assembly">; GameAssembly.dll+428264
+movss [rcx+104],xmm0
+&lt;/code>&lt;/pre>&lt;p>Na instrução acima (perceba que por se tratar de um jogo escrito em Unity, raramente vai aparecer algo fora do módulo &lt;code>GameAssembly.dll&lt;/code>) temos no endereço de memória contido em &lt;code>rcx&lt;/code> acrescido do &lt;em>offset&lt;/em> de 104 é a quantidade total de &lt;em>gold&lt;/em> que temos no momento do jogo. O mesmo &lt;em>offset&lt;/em> se repete na função dentro do &lt;code>Update()&lt;/code>, só que naquele momento, o endereço de memória está em &lt;code>rax&lt;/code>.&lt;/p>
+&lt;p>Pois bem, podemos fazer algumas coisas para conseguir substituir o valor de &lt;code>xmm0&lt;/code> para algo ridiculamente grande, porém não é possível simplesmente ter um valor com casas flutuantes e fazer uma atribuição direta ao &lt;code>xmm0&lt;/code> como &lt;code>movss xmm0,(float)9999&lt;/code>. Primeiro torna-se necessário inicializar o endereço de memória que vai representar o quanto haverá de &lt;em>gold&lt;/em> em &lt;code>xmm0&lt;/code> ao ser transportado para o endereço de memória &lt;code>[rcx+104]&lt;/code>:&lt;/p>
+&lt;pre>&lt;code class="language-assembly" data-lang="assembly">[ENABLE]
+alloc(newmem,2048,&amp;quot;GameAssembly.dll&amp;quot;+428044)
+label(returnhere)
+label(originalcode)
+label(exit)
+alloc(_gold,8,&amp;quot;GameAssembly.dll&amp;quot;+428044)
+registersymbol(_gold)
+_Gold:
+dd (float)1234567890
+newmem:
+movss xmm0,[_Gold]
+originalcode:
+movss [rcx+00000104],xmm0
+exit:
+jmp returnhere
+&amp;quot;GameAssembly.dll&amp;quot;+428044:
+jmp newmem
+nop 3
+returnhere:
+[DISABLE]
+dealloc(newmem)
+dealloc(_gold)
+unregistersymbol(_gold)
+&amp;quot;GameAssembly.dll&amp;quot;+428044:
+movss [rcx+00000104],xmm0
+&lt;/code>&lt;/pre>&lt;p>Como temos &lt;em>gold&lt;/em> sendo representado na memória como &lt;code>float&lt;/code>, precisamos alocar somente o tamanho correspondente em uma nova região de memória próxima da mesma altura da função dentro do módulo &lt;code>GameAssembly.dll&lt;/code>, por tanto alocamos &lt;code>_base&lt;/code> com 8 bytes de tamanho. Após inicializado podemos utilizar o &lt;em>label&lt;/em> &lt;code>newmem&lt;/code>, que representa assim como &lt;code>_base&lt;/code>, um canto na memória que temos todas as permissões possíveis, por tanto podemos sobrescrever o endereço de memória com o novo valor de &lt;code>xmm0&lt;/code>, que é literalmente 1234567890.&lt;/p>
+&lt;p>Mas dai começa alguns problemas, quando vendemos uma torre, ou cancelamos o upgrade de uma durante o jogo, é outra função que sobrescreve o endereço de memória, o que implica que o &lt;em>patch&lt;/em> realizado na injeção de código não mais terá efeito, tendo em vista que este é realizado em uma instrução completamente diferente.&lt;/p>
+&lt;h1 id="o-começo-do-meio">O começo do meio&lt;/h1>
+&lt;p>Assim acontece o problema, diversas instruções atingem o mesmo endereço de memória, todas seguem o mesmo padrão, isto é, compartilham do mesmo &lt;em>offset&lt;/em> de 0x104, todavia em registradores distintos. Uma das formas mais efetivas de contornar esse tipo de problema em diversos jogos, é encontrar a hierarquia de chamada das funções que efetivamente realização operações de escrita no endereço de memória, ou que realize leitura, mas tenha permissão para tal.&lt;/p>
+&lt;p>Para isso vamos dar uma olhada no primeiro &lt;em>opcode&lt;/em> que bate no endereço de memória, sendo o &lt;code>GameAssembly.dll+8DBFBA&lt;/code>:&lt;/p>
+&lt;pre>&lt;code class="language-assembly" data-lang="assembly">GameAssembly.dll+8DBFB5 - 48 85 C0 ; test rax,rax
+GameAssembly.dll+8DBFB8 - 74 16 ; je GameAssembly.dll+8DBFD0
+GameAssembly.dll+8DBFBA - F3 0F10 80 04010000 ; movss xmm0,[rax+00000104]
+GameAssembly.dll+8DBFC2 - E8 299392FF ; call GameAssembly.dll+2052F0
+GameAssembly.dll+8DBFC7 - F3 0F2C C0 ; cvttss2si eax,xmm0
+GameAssembly.dll+8DBFCB - 48 83 C4 28 ; add rsp,28 { 40 }
+GameAssembly.dll+8DBFCF - C3 ; ret
+GameAssembly.dll+8DBFD0 - E8 5B0592FF ; call GameAssembly.dll+1FC530
+&lt;/code>&lt;/pre>&lt;p>Ainda que o que nos interesse (&lt;code>movss xmm0,[rax+00000104]&lt;/code>) esteja dentro da condição do resultado de &lt;code>test rax,rax&lt;/code> (que no geral, basicamente testa se &lt;code>rax&lt;/code> == 0), podemos nos arriscar - talvez um pouco de forma otimista - sem analisar o que efetivamente significa esse teste. Se fosse para chutar, diria que é para validar se a cena de jogo efetivamente está carregada e disponível, uma &lt;em>flag&lt;/em> de validação das funções de &lt;em>runtime&lt;/em> da &lt;code>Update()&lt;/code> de aplicar certos bónus no caso de jogar com a opção de juros ativa. No geral, vamos ter um CEA para possibilitar o acesso ao endereço de memória antes de todo mundo da seguinte forma:&lt;/p>
+&lt;pre>&lt;code class="language-assembly" data-lang="assembly">[ENABLE]
+alloc(newmem,2048,&amp;quot;GameAssembly.dll&amp;quot;+8DBFBA)
+label(returnhere)
+label(originalcode)
+label(exit)
+globalalloc(_base,8,&amp;quot;GameAssembly.dll&amp;quot;+8DBFBA)
+_base:
+dd 0
+newmem:
+mov [_base],rax
+originalcode:
+movss xmm0,[rax+00000104]
+exit:
+jmp returnhere
+&amp;quot;GameAssembly.dll&amp;quot;+8DBFBA:
+jmp newmem
+nop 3
+returnhere:
+[DISABLE]
+dealloc(_base)
+unregistersymbol(_base)
+dealloc(newmem)
+&amp;quot;GameAssembly.dll&amp;quot;+8DBFBA:
+movss xmm0,[rax+00000104]
+&lt;/code>&lt;/pre>&lt;p>Nessa versão, temos finalmente uma instrução que acessa diretamente ao ponteiro de memória (desde que você lembre-se de acrescer o &lt;em>offset&lt;/em> correto de 0x104), e finalmente possibilitar a edição do valor correspondente ao &lt;em>gold&lt;/em> sem maiores dores de cabeça, e desde que não haja mudanças nesse módulo em especial (o que é improvável, já que o jogo é escrito juntamente da Unity), a injeção de código nessa altura, sempre vai resultar no endereço de memória cujo ponteiro mais o &lt;em>offset&lt;/em> é o &lt;em>gold&lt;/em>.&lt;/p>
+&lt;blockquote>
+&lt;p>&lt;strong>Nota&lt;/strong>: Se você dissecar adequadamente essa estrutura de memória que vem do endereço base de &lt;code>rax&lt;/code>, vai encontrar tudo aquilo que listei no item anterior, de vida infinita, até a velocidade dos &lt;em>minions&lt;/em>.&lt;/p>
+&lt;/blockquote></content></item><item><title>Analisando plguins wordpress em massa</title><link>https://exception.blog/posts/analisando-plugins-wordpress-em-massa/</link><pubDate>Tue, 06 Jul 2021 23:38:32 -0300</pubDate><guid>https://exception.blog/posts/analisando-plugins-wordpress-em-massa/</guid><description>Acredito que a grande maioria do pessoal que procura vulnerabilidades rentáveis dentro do mundo de aplicações web, em algum momento já passou pela stack que o WordPress fornece, seja auditando seu core, ou plugins, sendo este último o foco dessa postagem.
 Junto a um simples crawler escrito em C# 9.0 (só não usei os recursos do 10 pois não havia necessidade de delegates), vamos percorrer todos os plugins listáveis na index do site do projeto, e organiza-lo em uma estrutura contendo o próprio .</description><content>&lt;p>Acredito que a grande maioria do pessoal que procura vulnerabilidades rentáveis dentro do mundo de aplicações web, em algum momento já passou pela &lt;em>stack&lt;/em> que o WordPress fornece, seja auditando seu &lt;code>core&lt;/code>, ou plugins, sendo este último o foco dessa postagem.&lt;/p>
 &lt;p>Junto a um simples &lt;em>crawler&lt;/em> escrito em C# 9.0 (só não usei os recursos do 10 pois não havia necessidade de &lt;code>delegates&lt;/code>), vamos percorrer todos os &lt;em>plugins&lt;/em> listáveis na &lt;em>index&lt;/em> do site do projeto, e organiza-lo em uma estrutura contendo o próprio &lt;code>.zip&lt;/code> com o código do plugin.&lt;/p>
 &lt;blockquote>
