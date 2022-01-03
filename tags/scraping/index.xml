@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>scraping on Jojo's Exceptions</title><link>https://exception.blog/tags/scraping/</link><description>Recent content in scraping on Jojo's Exceptions</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Tue, 06 Jul 2021 23:38:32 -0300</lastBuildDate><atom:link href="https://exception.blog/tags/scraping/index.xml" rel="self" type="application/rss+xml"/><item><title>Analisando plguins wordpress em massa</title><link>https://exception.blog/posts/analisando-plugins-wordpress-em-massa/</link><pubDate>Tue, 06 Jul 2021 23:38:32 -0300</pubDate><guid>https://exception.blog/posts/analisando-plugins-wordpress-em-massa/</guid><description>Acredito que a grande maioria do pessoal que procura vulnerabilidades rentáveis dentro do mundo de aplicações web, em algum momento já passou pela stack que o WordPress fornece, seja auditando seu core, ou plugins, sendo este último o foco dessa postagem.
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>scraping on Jojo's Exceptions</title><link>https://exception.blog/tags/scraping/</link><description>Recent content in scraping on Jojo's Exceptions</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Tue, 06 Jul 2021 23:38:32 -0300</lastBuildDate><atom:link href="https://exception.blog/tags/scraping/index.xml" rel="self" type="application/rss+xml"/><item><title>Analisando plugins WordPress em massa</title><link>https://exception.blog/posts/analisando-plugins-wordpress-em-massa/</link><pubDate>Tue, 06 Jul 2021 23:38:32 -0300</pubDate><guid>https://exception.blog/posts/analisando-plugins-wordpress-em-massa/</guid><description>Acredito que a grande maioria do pessoal que procura vulnerabilidades rentáveis dentro do mundo de aplicações web, em algum momento já passou pela stack que o WordPress fornece, seja auditando seu core, ou plugins, sendo este último o foco dessa postagem.
 Junto a um simples crawler escrito em C# 9.0 (só não usei os recursos do 10 pois não havia necessidade de delegates), vamos percorrer todos os plugins listáveis na index do site do projeto, e organiza-lo em uma estrutura contendo o próprio .</description><content>&lt;p>Acredito que a grande maioria do pessoal que procura vulnerabilidades rentáveis dentro do mundo de aplicações web, em algum momento já passou pela &lt;em>stack&lt;/em> que o WordPress fornece, seja auditando seu &lt;code>core&lt;/code>, ou plugins, sendo este último o foco dessa postagem.&lt;/p>
 &lt;p>Junto a um simples &lt;em>crawler&lt;/em> escrito em C# 9.0 (só não usei os recursos do 10 pois não havia necessidade de &lt;code>delegates&lt;/code>), vamos percorrer todos os &lt;em>plugins&lt;/em> listáveis na &lt;em>index&lt;/em> do site do projeto, e organiza-lo em uma estrutura contendo o próprio &lt;code>.zip&lt;/code> com o código do plugin.&lt;/p>
 &lt;blockquote>
@@ -13,7 +13,7 @@ Junto a um simples crawler escrito em C# 9.0 (só não usei os recursos do 10 po
 &lt;/blockquote>
 &lt;p>Ah, e seguindo a linha das outras postagens, o código vou escrevendo conforme vou conseguindo tempo no meu dia-a-dia, por tanto essa postagem também se remete a essa condição, e pode ser atualizada constantemente conforme meu humor varie. Caso tenha visto alguma coisa que alterou, todo o blog está disponível em meu GitHub no &lt;code>/exception&lt;/code>.&lt;/p>
 &lt;p>Sem mais esperneios, vamos ao código-fonte. Esse que talvez não seja muito &lt;em>begginers friendly&lt;/em>, tendo em vista a utilização de recursos bem avançados do C#, porém, ainda contendo esse tipo de código, sua legibilidade é realmente simples:&lt;/p>
-&lt;div class="highlight">&lt;pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="color:#66d9ef">using&lt;/span> System;
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="color:#66d9ef">using&lt;/span> System;
 &lt;span style="color:#66d9ef">using&lt;/span> System.IO;
 &lt;span style="color:#66d9ef">using&lt;/span> System.Net;
 &lt;span style="color:#66d9ef">using&lt;/span> System.Linq;
@@ -127,7 +127,7 @@ pluginsPagesUniq.ForEach(l =&amp;gt; downloadPluginTasks.Add(DownloadPluginAsync
 &lt;/blockquote>
 &lt;h1 id="rodando-o-código">Rodando o código&lt;/h1>
 &lt;p>Ao executar o código acima (instalando a única depêndencia, que é o &lt;code>AngleSharp&lt;/code>) você terá em menos de dois minutos (caso tiver um processador com no minímo 8 &lt;em>threads&lt;/em>) mais de 1400 plugins baixados no diretório &lt;code>output&lt;/code> à partir do diretório que foi utilizado para compilar e executar o código. Algo nessa vibe:&lt;/p>
-&lt;pre>&lt;code>[+] Crawler started with a possible total of 20 thread(s)
+&lt;pre tabindex="0">&lt;code>[+] Crawler started with a possible total of 20 thread(s)
 [+] Downloaded 76 page(s) with unique plugins from WordPress
 [+] Downloaded 1395 plugin page(s)
 [+] Downloading file wp-lazy-loading.zip...
@@ -154,7 +154,7 @@ pluginsPagesUniq.ForEach(l =&amp;gt; downloadPluginTasks.Add(DownloadPluginAsync
 &lt;p>Como de praste, minha &lt;em>stack&lt;/em> de desenvolvimento vai ser o C# 9, junto do .NET5 (em breve pretendo mudar o &lt;em>target&lt;/em> para quando a &lt;em>preview&lt;/em> 3 do .NET6 estiver disponível, especialmente para brincar no Apple Silicon, e também explorar mais a MAUI, além de não ter problemas com a RFC do &lt;em>float&lt;/em>). Para o &lt;em>parsing&lt;/em> da sopinha de &lt;em>tags&lt;/em> do HTML, vou tentar uma approach o mais &lt;em>vanilla&lt;/em> possível, utilizando &lt;code>IndexOf()&lt;/code>, &lt;code>Remove()&lt;/code> e funções nativas da linguagem, para garantir uma performance consistente, sem adicionar bibliotecas complexas para uma finalidade muito simples.&lt;/p>
 &lt;h3 id="analisando-a-requisição-de-uma-postagem">Analisando a requisição de uma postagem&lt;/h3>
 &lt;p>A primeira coisa que vou fazer (estou escrevendo enquanto vou descobrindo a melhor forma de fazer isso acontecer, então caso queira apenas o resultado final, vá direto ao repositório referênciado no final da postagem) é analisar a aba &lt;em>network&lt;/em> do navegador, ao interagir com uma postagem:&lt;/p>
-&lt;div class="highlight">&lt;pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-shell" data-lang="shell">curl &lt;span style="color:#e6db74">&amp;#39;https://www.linkedin.com/voyager/api/feed/reactions?count=10&amp;amp;q=reactionType&amp;amp;start=70&amp;amp;threadUrn=urn:li:activity:XXXXX614171169XXXXX&amp;#39;&lt;/span> &lt;span style="color:#ae81ff">\
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-shell" data-lang="shell">curl &lt;span style="color:#e6db74">&amp;#39;https://www.linkedin.com/voyager/api/feed/reactions?count=10&amp;amp;q=reactionType&amp;amp;start=70&amp;amp;threadUrn=urn:li:activity:XXXXX614171169XXXXX&amp;#39;&lt;/span> &lt;span style="color:#ae81ff">\
 &lt;/span>&lt;span style="color:#ae81ff">&lt;/span> -H &lt;span style="color:#e6db74">&amp;#39;...&amp;#39;&lt;/span> &lt;span style="color:#ae81ff">\
 &lt;/span>&lt;span style="color:#ae81ff">&lt;/span> --compressed
 &lt;/code>&lt;/pre>&lt;/div>&lt;p>Realmente esperei que seria algo mais complexo, mas o LinkedIn facilita bastante, já que sua API RESTful fornece o &lt;em>endpoint&lt;/em> &lt;code>reactions&lt;/code> de fácil acesso a qualquer usuário, claro que no cabeçalho da requisiçao, existia minha sessão, que por motivos óbvios, acabei removendo-a para evitar problemas com os amigos &lt;em>h4x05s&lt;/em>.&lt;/p>
@@ -168,11 +168,11 @@ pluginsPagesUniq.ForEach(l =&amp;gt; downloadPluginTasks.Add(DownloadPluginAsync
 &lt;p>&lt;img src="https://exception.blog/static/image-20210314200041144.png" alt="O dataset formado">&lt;/p>
 &lt;p>Para simpliificar, e não fazer diversas requisições ao &lt;em>backend&lt;/em> do LinkedIn, escolhi aleatóriamente 1064 pessoas daquela postagem. Por fim o código em C# ficou uma bagunça, mas cumpriu seu propósito de forma majestosa, indexando todos esses resultados em apenas alguns segundos - tudo isso pode ser parametrizado através dos parâmetros da própria API da rede social.&lt;/p>
 &lt;p>Um ponto de atenção, é sobre os &lt;em>cookies&lt;/em> necessários para estar autenticado, e também, autorizado dentro do LinkedIn:&lt;/p>
-&lt;div class="highlight">&lt;pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="color:#66d9ef">var&lt;/span> session = &lt;span style="color:#66d9ef">new&lt;/span> CookieContainer();
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="color:#66d9ef">var&lt;/span> session = &lt;span style="color:#66d9ef">new&lt;/span> CookieContainer();
 session.Add(&lt;span style="color:#66d9ef">new&lt;/span> Cookie(&lt;span style="color:#e6db74">&amp;#34;JSESSIONID&amp;#34;&lt;/span>, &lt;span style="color:#e6db74">&amp;#34;...&amp;#34;&lt;/span>, &lt;span style="color:#e6db74">&amp;#34;/&amp;#34;&lt;/span>, &lt;span style="color:#e6db74">&amp;#34;.www.linkedin.com&amp;#34;&lt;/span>));
 session.Add(&lt;span style="color:#66d9ef">new&lt;/span> Cookie(&lt;span style="color:#e6db74">&amp;#34;li_at&amp;#34;&lt;/span>, &lt;span style="color:#e6db74">&amp;#34;...&amp;#34;&lt;/span>, &lt;span style="color:#e6db74">&amp;#34;/&amp;#34;&lt;/span>, &lt;span style="color:#e6db74">&amp;#34;.www.linkedin.com&amp;#34;&lt;/span>));
 &lt;/code>&lt;/pre>&lt;/div>&lt;p>Todos os demais &lt;em>cookies&lt;/em> são apenas &lt;em>trackers&lt;/em> ou caso você utilize um provedor de SSO. Para os &lt;em>headers&lt;/em>, para minha surpresa, só é necessário o seguinte:&lt;/p>
-&lt;div class="highlight">&lt;pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="color:#66d9ef">var&lt;/span> reactionsMessage = &lt;span style="color:#66d9ef">new&lt;/span> HttpRequestMessage(HttpMethod.Get, post)
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="color:#66d9ef">var&lt;/span> reactionsMessage = &lt;span style="color:#66d9ef">new&lt;/span> HttpRequestMessage(HttpMethod.Get, post)
 {
 Headers =
 {
@@ -180,7 +180,7 @@ Headers =
 }
 };
 &lt;/code>&lt;/pre>&lt;/div>&lt;p>E claro, configurar adequadamente seu &lt;code>HttpClient&lt;/code> e &lt;code>HttpClientHandler&lt;/code>. Deixei os &lt;em>cookies&lt;/em> apontados para o objeto &lt;code>session&lt;/code>, do primeiro &lt;em>snippet&lt;/em> de código, dessa forma ficou tudo bem organizado da seguinte forma:&lt;/p>
-&lt;div class="highlight">&lt;pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="color:#66d9ef">using&lt;/span> var clientHandler = &lt;span style="color:#66d9ef">new&lt;/span> HttpClientHandler
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="color:#66d9ef">using&lt;/span> var clientHandler = &lt;span style="color:#66d9ef">new&lt;/span> HttpClientHandler
 {
 UseCookies = &lt;span style="color:#66d9ef">true&lt;/span>,
 AllowAutoRedirect = &lt;span style="color:#66d9ef">false&lt;/span>,
@@ -188,19 +188,19 @@ CookieContainer = session
 };
 &lt;span style="color:#66d9ef">using&lt;/span> var client = &lt;span style="color:#66d9ef">new&lt;/span> HttpClient(clientHandler);
 &lt;/code>&lt;/pre>&lt;/div>&lt;p>Depois de tudo isso, veio uma parte meia feia, no que se diz respeito as melhores práticas para nomear os tipos dentro do C#, isso acontece nessa versão do .NET5 por conta da falta de suporte da &lt;em>annotation&lt;/em> &lt;code>JsonPropertyName&lt;/code>, de ser utilizada em &lt;code>record&lt;/code> e também em seus construtores, então para simplificar o código, abstrai apenas os elementos que foram importantes para essa análise:&lt;/p>
-&lt;div class="highlight">&lt;pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="color:#66d9ef">private&lt;/span> record Paging(&lt;span style="color:#66d9ef">int&lt;/span> start, &lt;span style="color:#66d9ef">int&lt;/span> total, &lt;span style="color:#66d9ef">int&lt;/span> count);
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="color:#66d9ef">private&lt;/span> record Paging(&lt;span style="color:#66d9ef">int&lt;/span> start, &lt;span style="color:#66d9ef">int&lt;/span> total, &lt;span style="color:#66d9ef">int&lt;/span> count);
 &lt;span style="color:#66d9ef">private&lt;/span> record description(&lt;span style="color:#66d9ef">string&lt;/span> text);
 &lt;span style="color:#66d9ef">private&lt;/span> record name(&lt;span style="color:#66d9ef">string&lt;/span> text);
 &lt;span style="color:#66d9ef">private&lt;/span> record Element(&lt;span style="color:#66d9ef">string&lt;/span> reactionType, description description, name name);
 &lt;/code>&lt;/pre>&lt;/div>&lt;p>De certa forma ficou simples, porém dava para ter feito melhor. Com as limitações da &lt;code>System.Text.Json&lt;/code>, acredito que por enquanto, esse seria o mais minificado que conseguiria chegar por enquanto. Para realizar o &lt;em>parsing&lt;/em> do JSON que é respondido, fiz algo bem simples - mas sentindo muita falta da simplicidade de tratar tipos de forma dinâmica, igual temos na NewtonSoftware, mas como sempre prefiro fazer sem utilizar nada além da &lt;em>std&lt;/em>, acho que está de bom tamanho:&lt;/p>
-&lt;div class="highlight">&lt;pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="color:#66d9ef">var&lt;/span> content = &lt;span style="color:#66d9ef">await&lt;/span> response.Content.ReadAsStringAsync();
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="color:#66d9ef">var&lt;/span> content = &lt;span style="color:#66d9ef">await&lt;/span> response.Content.ReadAsStringAsync();
 &lt;span style="color:#66d9ef">var&lt;/span> payload = JsonSerializer.Deserialize&amp;lt;JsonElement&amp;gt;(content);
 &lt;span style="color:#66d9ef">var&lt;/span> paging = JsonSerializer.Deserialize&amp;lt;Paging&amp;gt;(payload.GetProperty(&lt;span style="color:#e6db74">&amp;#34;paging&amp;#34;&lt;/span>).GetRawText());
 &lt;span style="color:#66d9ef">if&lt;/span> (paging == &lt;span style="color:#66d9ef">null&lt;/span>) &lt;span style="color:#66d9ef">return&lt;/span>;
 &lt;/code>&lt;/pre>&lt;/div>&lt;p>E dessa forma seguimos o &lt;em>parsing&lt;/em> para os demais &lt;code>record&lt;/code>:&lt;/p>
-&lt;div class="highlight">&lt;pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-c#" data-lang="c#">&lt;span style="color:#66d9ef">var&lt;/span> elements = JsonSerializer.Deserialize&amp;lt;List&amp;lt;Element&amp;gt;&amp;gt;(payload.GetProperty(&lt;span style="color:#e6db74">&amp;#34;elements&amp;#34;&lt;/span>).GetRawText());
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-c#" data-lang="c#">&lt;span style="color:#66d9ef">var&lt;/span> elements = JsonSerializer.Deserialize&amp;lt;List&amp;lt;Element&amp;gt;&amp;gt;(payload.GetProperty(&lt;span style="color:#e6db74">&amp;#34;elements&amp;#34;&lt;/span>).GetRawText());
 &lt;/code>&lt;/pre>&lt;/div>&lt;p>Na verdade todos eles estão referenciados explicitamente pelo &lt;code>Element&lt;/code>, dessa forma, basta iterar sobre a lista e colher os dados que julgar necessário. No meu caso imprimi na tela, conforme nas primeiras imagens, para ter uma noção de como as coisas estavam funcionando:&lt;/p>
-&lt;div class="highlight">&lt;pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-c#" data-lang="c#">elements.ForEach(e =&amp;gt;
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-c#" data-lang="c#">elements.ForEach(e =&amp;gt;
 {
 &lt;span style="color:#66d9ef">if&lt;/span> (e == &lt;span style="color:#66d9ef">null&lt;/span>) &lt;span style="color:#66d9ef">return&lt;/span>;
 &lt;span style="color:#66d9ef">if&lt;/span> (e.name != &lt;span style="color:#66d9ef">null&lt;/span> &amp;amp;&amp;amp; !&lt;span style="color:#66d9ef">string&lt;/span>.IsNullOrEmpty(e.name.text))
@@ -218,11 +218,11 @@ Console.WriteLine(&lt;span style="color:#e6db74">$&amp;#34; &amp;gt; Type: {e.re
 });
 &lt;/code>&lt;/pre>&lt;/div>&lt;p>Ainda que não temos algo dinâmico, as referênciais internas dos &lt;code>record&lt;/code> ainda podem ser traiçoeiras se acessadas diretamente, como tentar navegar diretamente para &lt;code>e.name.text&lt;/code>, que pode resultar em uma referência nula dentro do escopo de execução, por isso temos também a validação de &lt;code>e.name != null&lt;/code>.&lt;/p>
 &lt;p>Depois disso tudo, só utilizo um &lt;code>Distinct()&lt;/code> e indexo todo o resultado em um &lt;code>.csv&lt;/code>:&lt;/p>
-&lt;div class="highlight">&lt;pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="color:#66d9ef">await&lt;/span> File.WriteAllLinesAsync(&lt;span style="color:#e6db74">&amp;#34;result.csv&amp;#34;&lt;/span>, textToWrite.Distinct().ToList());
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="color:#66d9ef">await&lt;/span> File.WriteAllLinesAsync(&lt;span style="color:#e6db74">&amp;#34;result.csv&amp;#34;&lt;/span>, textToWrite.Distinct().ToList());
 &lt;/code>&lt;/pre>&lt;/div>&lt;p>E tudo isso vai ter como produto, o que vamos utilizar para analisar de forma mais profunda os dados, de quem gosta mais de &lt;code>X&lt;/code> ou &lt;code>Y&lt;/code>.&lt;/p>
 &lt;h1 id="quem-é-quem">Quem é quem?&lt;/h1>
 &lt;p>Vamos analisar brevemente os dados produzidos. Para simplificar, realizei a conversão desse &lt;code>.csv&lt;/code> para um &lt;code>.sqlite&lt;/code> (poderia ter utilizado algo mais simples com &lt;code>pandas&lt;/code>) e consumindo os resultados pela própria &lt;em>shell&lt;/em> do &lt;code>sqlite3&lt;/code>:&lt;/p>
-&lt;pre>&lt;code class="language-sqlite" data-lang="sqlite">sqlite&amp;gt; .schema
+&lt;pre tabindex="0">&lt;code class="language-sqlite" data-lang="sqlite">sqlite&amp;gt; .schema
 CREATE TABLE CRAW(
 &amp;quot;NAME&amp;quot; TEXT,
 &amp;quot;ROLE&amp;quot; TEXT,
@@ -236,12 +236,12 @@ sqlite&amp;gt; SELECT COUNT() FROM CRAW;
 &lt;li>À favor do Lula: Quem possívelmente teve sua reação como sendo &lt;code>EMPATHY&lt;/code>.&lt;/li>
 &lt;/ul>
 &lt;p>Com isso em pauta, vamos olhar a quantidade de pessoas que votaram em cada uma das figuras políticas:&lt;/p>
-&lt;pre>&lt;code class="language-sqlite" data-lang="sqlite">sqlite&amp;gt; SELECT COUNT() FROM CRAW WHERE REACTION = &amp;quot;EMPATHY&amp;quot;;
+&lt;pre tabindex="0">&lt;code class="language-sqlite" data-lang="sqlite">sqlite&amp;gt; SELECT COUNT() FROM CRAW WHERE REACTION = &amp;quot;EMPATHY&amp;quot;;
 319
 sqlite&amp;gt; SELECT COUNT() FROM CRAW WHERE REACTION = &amp;quot;LIKE&amp;quot;;
 668
 &lt;/code>&lt;/pre>&lt;p>Nesse &lt;em>dataset&lt;/em> que colhi da postagem, chegamos ao total de 319 votos à favor do Lula, e 668 votos para o Bolsonaro. Porém, da mesma forma que podemos apenas realizar um &lt;code>COUNT()&lt;/code>, também podemos olhar apenas para os nomes de quem possívelmente prefere governo &lt;code>X&lt;/code> ou &lt;code>Y&lt;/code>, começando pelo candidato de direita:&lt;/p>
-&lt;pre>&lt;code class="language-sqlite" data-lang="sqlite">sqlite&amp;gt; SELECT NAME FROM CRAW WHERE REACTION = &amp;quot;LIKE&amp;quot; LIMIT 10;
+&lt;pre tabindex="0">&lt;code class="language-sqlite" data-lang="sqlite">sqlite&amp;gt; SELECT NAME FROM CRAW WHERE REACTION = &amp;quot;LIKE&amp;quot; LIMIT 10;
 NADINE JUNKES
 MATHEUS CHAGAS
 BRUNO JARED CRUZ
@@ -253,7 +253,7 @@ JEFFERSON J.
 SARA ELAINE LOPES PEREIRA
 MÁRCIO ROSA
 &lt;/code>&lt;/pre>&lt;p>E por fim, Lula:&lt;/p>
-&lt;pre>&lt;code class="language-sqlite" data-lang="sqlite">sqlite&amp;gt; SELECT NAME FROM CRAW WHERE REACTION = &amp;quot;EMPATHY&amp;quot; LIMIT 10;
+&lt;pre tabindex="0">&lt;code class="language-sqlite" data-lang="sqlite">sqlite&amp;gt; SELECT NAME FROM CRAW WHERE REACTION = &amp;quot;EMPATHY&amp;quot; LIMIT 10;
 ANA CECÍLIA MACHADO
 GIOVANNA DUARTE ALMEIDA
 LUCAS CATTA PRÊTA

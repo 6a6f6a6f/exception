@@ -13,7 +13,7 @@ Foi uma discussão bem legal com alguns monstros da CLR e até mesmo do Roslyn, 
 &lt;p>Vai por mim, evite utilizar funções que podem receber uma sobrecarga de uma instância de &lt;code>CancellationToken&lt;/code>, se ela pode trabalhar com os &lt;em>status&lt;/em> provenientes dessa estrutura, algum motivo tem.&lt;/p>
 &lt;/blockquote>
 &lt;p>Para simplificar o entendimento de todo esse cenário intangível, vamos trazer ao código uma péssima prática de programação (que quase me fez desistir do desenvolvimento do &lt;a href="https://github.com/BizarreNULL/httpdoom/">HttpDoom&lt;/a>) relacionada ao paralelismo e assincronicidade de código:&lt;/p>
-&lt;div class="highlight">&lt;pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="color:#66d9ef">using&lt;/span> System;
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="color:#66d9ef">using&lt;/span> System;
 &lt;span style="color:#66d9ef">using&lt;/span> System.Linq;
 &lt;span style="color:#66d9ef">using&lt;/span> System.Net.Http;
 &lt;span style="color:#66d9ef">using&lt;/span> System.Threading.Tasks;
@@ -37,7 +37,7 @@ tasks
 &lt;/blockquote>
 &lt;p>Um código bem simples, e que - se liga no &lt;em>plot twist&lt;/em> - funciona perfeitamente bem! O motivo de tudo funcionar como deveria, é que temos implementado somente uma única responsabilidade dentro da função paralela e assíncrona, onde é iniciado 5000 &lt;code>Task&amp;lt;HttpResponseMessage&amp;gt;&lt;/code> que será aguardada logo no seu &lt;em>enclosure&lt;/em> que é justamente a própria &lt;code>Task.WhenAll&lt;/code>, por ser uma expressão LINQ, o código pode ser um pouco difícil de ler, mas nada que alguns minutos de leitura não resolva.&lt;/p>
 &lt;p>O problema que estamos tentando criar, acontece quando além dessa única coisa que é feita (&lt;code>return new HttpClient().GetAsync(&amp;quot;https://google.com&amp;quot;))&lt;/code>, na expressão anônima da extensão &lt;code>Select()&lt;/code> lá do LINQ), adicionamos alguma função que freia a execução dessa &lt;em>thread&lt;/em>, por exemplo, escrever na tela informações da requisição conforme são executadas, vamos alterar um pouco o código e adicionar algumas funções que fação operações de IO:&lt;/p>
-&lt;div class="highlight">&lt;pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="color:#75715e">// ...
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="color:#75715e">// ...
 &lt;/span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#66d9ef">await&lt;/span> Task.WhenAll(Enumerable.Range(&lt;span style="color:#ae81ff">1&lt;/span>, &lt;span style="color:#ae81ff">5000&lt;/span>)
 .Select(&lt;span style="color:#66d9ef">async&lt;/span> &lt;span style="color:#ae81ff">_&lt;/span> =&amp;gt;
 {
@@ -63,7 +63,7 @@ Console.WriteLine(e.InnerException != &lt;span style="color:#66d9ef">null&lt;/sp
 &lt;h1 id="resolvendo-com-uma-boa-sinalização">Resolvendo com uma boa sinalização&lt;/h1>
 &lt;p>Existem diversas APIs que são fornecidas dentro do CLR para sanar os problemas de paralelismo que correspondem a estes erros, podemos realizar a implementação mais simples que conheço, que tem pouquíssimas alterações no código fonte original da aplicação, utilizando &lt;code>SemaphoreSlim&lt;/code> para corrigir esse fiasco.&lt;/p>
 &lt;p>Podemos resumir esse elemento de &lt;code>System.Threads&lt;/code> como sendo uma entidade responsável por limitar o número de &lt;em>threads&lt;/em> que podem acessar uma &lt;em>pool&lt;/em> de recursos, que é justamente o que causa &amp;ldquo;&lt;em>The operation was canceled&lt;/em>&amp;rdquo; dentro de uma &lt;code>Task&lt;/code>. Sua implementação é bem simples, e ele receber por padrão um único argumento correspondente a quantidade máxima de &lt;em>threads&lt;/em> que podem ser alocadas para acessar estes recursos:&lt;/p>
-&lt;div class="highlight">&lt;pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-c#" data-lang="c#">&lt;span style="color:#66d9ef">var&lt;/span> semaphore = &lt;span style="color:#66d9ef">new&lt;/span> SemaphoreSlim(Environment.ProcessorCount);
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-c#" data-lang="c#">&lt;span style="color:#66d9ef">var&lt;/span> semaphore = &lt;span style="color:#66d9ef">new&lt;/span> SemaphoreSlim(Environment.ProcessorCount);
 &lt;span style="color:#66d9ef">await&lt;/span> Task.WhenAll(Enumerable.Range(&lt;span style="color:#ae81ff">1&lt;/span>, &lt;span style="color:#ae81ff">1000&lt;/span>)
 .Select(&lt;span style="color:#66d9ef">async&lt;/span> &lt;span style="color:#ae81ff">_&lt;/span> =&amp;gt;
 {

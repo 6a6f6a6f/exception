@@ -5,7 +5,7 @@ O moddado da vez Escolher um TD (caso você não conheça, é o que significa to
 &lt;p>Sem sombra de dúvidas o GOAT dos TDs sempre vai ser os primórdios de Warcraft 2 (esse não tinha algo dedicado ao &lt;em>Element&lt;/em>, mas tinha umas paradas doidas) e Warcraft 3, que efetivamente marcou o nome &lt;em>Element&lt;/em>, com os mapas montados para serem jogados como TD, perdi facilmente centenas de horas da minha infância e adolescência neles (atualmente não perco mais, considero investimento). Felizmente no mundo estranho em que vivemos atualmente, ainda disponhamos de um bom lançamento para somar na cena de jogos TD: A continuação de &lt;em>Element TD&lt;/em>, com um título para lá de óbvio, &lt;em>Element TD 2&lt;/em>.&lt;/p>
 &lt;blockquote>
 &lt;p>&lt;strong>Nota&lt;/strong>: O jogo utiliza Unity, e também o famoso (e chato de mais) &lt;code>il2cpp&lt;/code>, que para um jogo sem o devido cuidado na hora de fazer o código intermediário da CLR virar essa gambiarra grotesca de nativo, é relativamente fácil de ser modificado. Ainda asim, sou a favor de moddings mais amigos do binário, isso é, que efetivamente não o altera, então só vamos fuçar em estruturas de memória e alguns padrões de estruturas.&lt;/p>
-&lt;p>Utilizar algum framework pronto para modding em Unity é a melhor alternativa sempre, mas isso envolve chamar o BepInEx e alterar algumas configurações gráficas (já que o &lt;code>&lt;/code> não tem o mesmo suporte para fazer o &lt;em>rendering&lt;/em>, por exemplo, de um IMGUI) além da própria estrutura dos arquivos e binários do jogo.&lt;/p>
+&lt;p>Utilizar algum framework pronto para modding em Unity é a melhor alternativa sempre, mas isso envolve chamar o BepInEx e alterar algumas configurações gráficas (já que o &lt;code> &lt;/code> não tem o mesmo suporte para fazer o &lt;em>rendering&lt;/em>, por exemplo, de um IMGUI) além da própria estrutura dos arquivos e binários do jogo.&lt;/p>
 &lt;/blockquote>
 &lt;p>Quem jogou os clássicos mapas dos jogos primordiais, não deve se estranhar em notar uma forte semelhança com o que vemos em &lt;em>Element TD 2&lt;/em>, lançado no dia 2 de Abril desse ano, ao menos oficialmente, sua versão de &lt;em>early access&lt;/em> esteve no ar desde o começo do ano passado. Uma observação interessante, caso você conheça as rinhas de galinha japonesas legalizadas, popularizado sobre o nome Pokémon, vai ter uma facilidade para jogar esse game, por conta das fraquezas de certos elementos contra outros de tipos distintos.&lt;/p>
 &lt;h1 id="jogando-na-moral-ou-quase">Jogando na moral (ou quase)&lt;/h1>
@@ -23,7 +23,7 @@ O moddado da vez Escolher um TD (caso você não conheça, é o que significa to
 &lt;/ul>
 &lt;p>Devem haver outras centenas de coisas que devem ser triviais para serem feitas, mas vamos nos focar em algumas da lista acima. Para começar, vamos dar uma olhada em como o &lt;em>gold&lt;/em> (que é diferente do patrimônio) funciona dentro do game. Existem alguns bons &lt;em>opcodes&lt;/em> que compartilham o acesso a mesma chamada de função dentro do &lt;code>Update()&lt;/code>, entretanto, podemos utilizar esse comportamento de acesso ao endereço de memória que corresponde ao &lt;em>gold&lt;/em> para literalmente mapear qualquer outra estrutura nesse caso específico do &lt;em>Elements TD 2&lt;/em>.&lt;/p>
 &lt;p>Mas focando apenas no que ocorre quando uma determinada função ocorre, que é exatamente aquela dentro do &lt;em>loop&lt;/em> do jogo:&lt;/p>
-&lt;pre>&lt;code class="language-assembly" data-lang="assembly">movss xmm0,[rax+104]
+&lt;pre tabindex="0">&lt;code class="language-assembly" data-lang="assembly">movss xmm0,[rax+104]
 call GameAssembly.dll+2052F0
 cvttss2si eax,xmm0
 add rsp,28
@@ -31,11 +31,11 @@ ret
 &lt;/code>&lt;/pre>&lt;p>Acho que a única &lt;em>capetisse&lt;/em> que tem ai no código do &lt;em>disassembler&lt;/em> é literalmente a instrução &lt;code>cvttss2si&lt;/code> (otimizações de compiladores modernos geram coisas estranhas, mas que teoricamente são performáticas, nesse caso acaba sendo a única opção), no contexto geral, não há muito interesse nessa função, e mexer nela seria uma péssima ideia, caso você esteja curioso sobre a empregabilidade dela, de uma verificada no seu manual favorito de IA64.&lt;/p>
 &lt;p>No final das contas, a única coisa que nos interessa é o endereço de memória de &lt;code>rax&lt;/code>, que pode ser utilizado em seu &lt;em>base address&lt;/em> como mapa para diversos ponteiros de memórias, e consequentemente diversas estruturas de memórias bem interessantes do jogo. Ainda assim, para deixar as coisas mais simples, tendo em vista que diversos endereços de memória são visitados pela instrução &lt;code>movss xmm0,[rax+104]&lt;/code>, encontrar efetivamente uma caracteristica em meio aquelas que acessam o endereço que nos interessa, o &lt;em>gold&lt;/em> propriamente dito possa ser um pé no saco.&lt;/p>
 &lt;p>Por fim podemos procurar por &lt;em>opcodes&lt;/em> que definitivamente escrevem no endereço de memória correspondente ao &lt;em>gold&lt;/em>, dessa forma, a probabilidade daquela função ser reutilizada em outras estruturas da &lt;em>engine&lt;/em> do jogo é menor - mas perceba que não é nula, mais para frente vamos notar que efetivamente ocorre alguns problemas em outras estruturas de memória quando realizarmos o &lt;em>patch&lt;/em> na memória do jogo -, e por tanto mais tranquila de se alterar sem ter grandes impactos na estabilidade do processo. Que neste caso seria:&lt;/p>
-&lt;pre>&lt;code class="language-assembly" data-lang="assembly">; GameAssembly.dll+428264
+&lt;pre tabindex="0">&lt;code class="language-assembly" data-lang="assembly">; GameAssembly.dll+428264
 movss [rcx+104],xmm0
 &lt;/code>&lt;/pre>&lt;p>Na instrução acima (perceba que por se tratar de um jogo escrito em Unity, raramente vai aparecer algo fora do módulo &lt;code>GameAssembly.dll&lt;/code>) temos no endereço de memória contido em &lt;code>rcx&lt;/code> acrescido do &lt;em>offset&lt;/em> de 0x104 é a quantidade total de &lt;em>gold&lt;/em> que temos no momento do jogo. O mesmo &lt;em>offset&lt;/em> se repete na função dentro do &lt;code>Update()&lt;/code>, só que naquele momento, o endereço de memória está em algum lugar de &lt;code>rax&lt;/code>.&lt;/p>
 &lt;p>Pois bem, podemos fazer algumas coisas para conseguir substituir o valor de &lt;code>xmm0&lt;/code> para algo ridiculamente grande, porém não é possível simplesmente ter um valor com casas flutuantes e fazer uma atribuição direta ao &lt;code>xmm0&lt;/code> como &lt;code>movss xmm0,(float)9999&lt;/code>. Primeiro torna-se necessário inicializar o endereço de memória que vai representar o quanto haverá de &lt;em>gold&lt;/em> em &lt;code>xmm0&lt;/code> ao ser transportado para o endereço de memória &lt;code>[rcx+104]&lt;/code>:&lt;/p>
-&lt;pre>&lt;code class="language-assembly" data-lang="assembly">[ENABLE]
+&lt;pre tabindex="0">&lt;code class="language-assembly" data-lang="assembly">[ENABLE]
 alloc(newmem,2048,&amp;quot;GameAssembly.dll&amp;quot;+428044)
 label(returnhere)
 label(originalcode)
@@ -65,7 +65,7 @@ movss [rcx+00000104],xmm0
 &lt;h1 id="o-começo-do-meio">O começo do meio&lt;/h1>
 &lt;p>Assim acontece o problema, diversas instruções atingem o mesmo endereço de memória, todas seguem o mesmo padrão, isto é, compartilham do mesmo &lt;em>offset&lt;/em> de 0x104, todavia em registradores distintos. Uma das formas mais efetivas de contornar esse tipo de problema em diversos jogos, é encontrar a hierarquia de chamada das funções que realização operações de escrita de maneira explicita no endereço de memória, ou que realize leitura, mas tenha permissão para tal.&lt;/p>
 &lt;p>Para isso vamos dar uma olhada no primeiro &lt;em>opcode&lt;/em> que bate no endereço de memória, na altura de &lt;code>GameAssembly.dll+8DBFBA&lt;/code>:&lt;/p>
-&lt;pre>&lt;code class="language-assembly" data-lang="assembly">GameAssembly.dll+8DBFB5 - 48 85 C0 ; test rax,rax
+&lt;pre tabindex="0">&lt;code class="language-assembly" data-lang="assembly">GameAssembly.dll+8DBFB5 - 48 85 C0 ; test rax,rax
 GameAssembly.dll+8DBFB8 - 74 16 ; je GameAssembly.dll+8DBFD0
 GameAssembly.dll+8DBFBA - F3 0F10 80 04010000 ; movss xmm0,[rax+00000104]
 GameAssembly.dll+8DBFC2 - E8 299392FF ; call GameAssembly.dll+2052F0
@@ -74,7 +74,7 @@ GameAssembly.dll+8DBFCB - 48 83 C4 28 ; add rsp,28 { 40 }
 GameAssembly.dll+8DBFCF - C3 ; ret
 GameAssembly.dll+8DBFD0 - E8 5B0592FF ; call GameAssembly.dll+1FC530
 &lt;/code>&lt;/pre>&lt;p>Ainda que o que nos interesse (&lt;code>movss xmm0,[rax+00000104]&lt;/code>) esteja dentro da condição do resultado de &lt;code>test rax,rax&lt;/code> (que no geral, basicamente testa se &lt;code>rax&lt;/code> == 0), podemos nos arriscar - talvez um pouco de forma otimista - sem analisar o que efetivamente significa esse teste. Se fosse para chutar, diria que é para validar se a cena de jogo efetivamente está carregada e disponível, uma &lt;em>flag&lt;/em> de validação das funções de &lt;em>runtime&lt;/em> da &lt;code>Update()&lt;/code> de aplicar certos bônus no caso de jogar com a opção de juros ativa. No geral, vamos ter um CEA para possibilitar o acesso ao endereço de memória antes de todo mundo da seguinte forma:&lt;/p>
-&lt;pre>&lt;code class="language-assembly" data-lang="assembly">[ENABLE]
+&lt;pre tabindex="0">&lt;code class="language-assembly" data-lang="assembly">[ENABLE]
 alloc(newmem,2048,&amp;quot;GameAssembly.dll&amp;quot;+8DBFBA)
 label(returnhere)
 label(originalcode)
@@ -101,7 +101,7 @@ movss xmm0,[rax+00000104]
 &lt;/code>&lt;/pre>&lt;p>Nessa versão, temos finalmente uma instrução que acessa diretamente ao ponteiro de memória (desde que você lembre-se de acrescer o &lt;em>offset&lt;/em> correto de 0x104), e finalmente possibilitar a edição do valor correspondente ao &lt;em>gold&lt;/em> sem maiores dores de cabeça, e desde que não haja mudanças nesse módulo em especial (o que é improvável, já que o jogo é escrito juntamente da Unity), a injeção de código nessa altura, sempre vai resultar no endereço de memória cujo ponteiro mais o &lt;em>offset&lt;/em> é o &lt;em>gold&lt;/em>.&lt;/p>
 &lt;blockquote>
 &lt;p>&lt;strong>Nota&lt;/strong>: Se você dissecar adequadamente essa estrutura de memória que vem do endereço base de &lt;code>rax&lt;/code>, vai encontrar tudo aquilo que listei no item anterior, de vida infinita, até a velocidade dos &lt;em>minions&lt;/em>.&lt;/p>
-&lt;/blockquote></content></item><item><title>Analisando plguins wordpress em massa</title><link>https://exception.blog/posts/analisando-plugins-wordpress-em-massa/</link><pubDate>Tue, 06 Jul 2021 23:38:32 -0300</pubDate><guid>https://exception.blog/posts/analisando-plugins-wordpress-em-massa/</guid><description>Acredito que a grande maioria do pessoal que procura vulnerabilidades rentáveis dentro do mundo de aplicações web, em algum momento já passou pela stack que o WordPress fornece, seja auditando seu core, ou plugins, sendo este último o foco dessa postagem.
+&lt;/blockquote></content></item><item><title>Analisando plugins WordPress em massa</title><link>https://exception.blog/posts/analisando-plugins-wordpress-em-massa/</link><pubDate>Tue, 06 Jul 2021 23:38:32 -0300</pubDate><guid>https://exception.blog/posts/analisando-plugins-wordpress-em-massa/</guid><description>Acredito que a grande maioria do pessoal que procura vulnerabilidades rentáveis dentro do mundo de aplicações web, em algum momento já passou pela stack que o WordPress fornece, seja auditando seu core, ou plugins, sendo este último o foco dessa postagem.
 Junto a um simples crawler escrito em C# 9.0 (só não usei os recursos do 10 pois não havia necessidade de delegates), vamos percorrer todos os plugins listáveis na index do site do projeto, e organiza-lo em uma estrutura contendo o próprio .</description><content>&lt;p>Acredito que a grande maioria do pessoal que procura vulnerabilidades rentáveis dentro do mundo de aplicações web, em algum momento já passou pela &lt;em>stack&lt;/em> que o WordPress fornece, seja auditando seu &lt;code>core&lt;/code>, ou plugins, sendo este último o foco dessa postagem.&lt;/p>
 &lt;p>Junto a um simples &lt;em>crawler&lt;/em> escrito em C# 9.0 (só não usei os recursos do 10 pois não havia necessidade de &lt;code>delegates&lt;/code>), vamos percorrer todos os &lt;em>plugins&lt;/em> listáveis na &lt;em>index&lt;/em> do site do projeto, e organiza-lo em uma estrutura contendo o próprio &lt;code>.zip&lt;/code> com o código do plugin.&lt;/p>
 &lt;blockquote>
@@ -116,7 +116,7 @@ Junto a um simples crawler escrito em C# 9.0 (só não usei os recursos do 10 po
 &lt;/blockquote>
 &lt;p>Ah, e seguindo a linha das outras postagens, o código vou escrevendo conforme vou conseguindo tempo no meu dia-a-dia, por tanto essa postagem também se remete a essa condição, e pode ser atualizada constantemente conforme meu humor varie. Caso tenha visto alguma coisa que alterou, todo o blog está disponível em meu GitHub no &lt;code>/exception&lt;/code>.&lt;/p>
 &lt;p>Sem mais esperneios, vamos ao código-fonte. Esse que talvez não seja muito &lt;em>begginers friendly&lt;/em>, tendo em vista a utilização de recursos bem avançados do C#, porém, ainda contendo esse tipo de código, sua legibilidade é realmente simples:&lt;/p>
-&lt;div class="highlight">&lt;pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="color:#66d9ef">using&lt;/span> System;
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="color:#66d9ef">using&lt;/span> System;
 &lt;span style="color:#66d9ef">using&lt;/span> System.IO;
 &lt;span style="color:#66d9ef">using&lt;/span> System.Net;
 &lt;span style="color:#66d9ef">using&lt;/span> System.Linq;
@@ -230,7 +230,7 @@ pluginsPagesUniq.ForEach(l =&amp;gt; downloadPluginTasks.Add(DownloadPluginAsync
 &lt;/blockquote>
 &lt;h1 id="rodando-o-código">Rodando o código&lt;/h1>
 &lt;p>Ao executar o código acima (instalando a única depêndencia, que é o &lt;code>AngleSharp&lt;/code>) você terá em menos de dois minutos (caso tiver um processador com no minímo 8 &lt;em>threads&lt;/em>) mais de 1400 plugins baixados no diretório &lt;code>output&lt;/code> à partir do diretório que foi utilizado para compilar e executar o código. Algo nessa vibe:&lt;/p>
-&lt;pre>&lt;code>[+] Crawler started with a possible total of 20 thread(s)
+&lt;pre tabindex="0">&lt;code>[+] Crawler started with a possible total of 20 thread(s)
 [+] Downloaded 76 page(s) with unique plugins from WordPress
 [+] Downloaded 1395 plugin page(s)
 [+] Downloading file wp-lazy-loading.zip...
@@ -257,7 +257,7 @@ pluginsPagesUniq.ForEach(l =&amp;gt; downloadPluginTasks.Add(DownloadPluginAsync
 &lt;p>Como de praste, minha &lt;em>stack&lt;/em> de desenvolvimento vai ser o C# 9, junto do .NET5 (em breve pretendo mudar o &lt;em>target&lt;/em> para quando a &lt;em>preview&lt;/em> 3 do .NET6 estiver disponível, especialmente para brincar no Apple Silicon, e também explorar mais a MAUI, além de não ter problemas com a RFC do &lt;em>float&lt;/em>). Para o &lt;em>parsing&lt;/em> da sopinha de &lt;em>tags&lt;/em> do HTML, vou tentar uma approach o mais &lt;em>vanilla&lt;/em> possível, utilizando &lt;code>IndexOf()&lt;/code>, &lt;code>Remove()&lt;/code> e funções nativas da linguagem, para garantir uma performance consistente, sem adicionar bibliotecas complexas para uma finalidade muito simples.&lt;/p>
 &lt;h3 id="analisando-a-requisição-de-uma-postagem">Analisando a requisição de uma postagem&lt;/h3>
 &lt;p>A primeira coisa que vou fazer (estou escrevendo enquanto vou descobrindo a melhor forma de fazer isso acontecer, então caso queira apenas o resultado final, vá direto ao repositório referênciado no final da postagem) é analisar a aba &lt;em>network&lt;/em> do navegador, ao interagir com uma postagem:&lt;/p>
-&lt;div class="highlight">&lt;pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-shell" data-lang="shell">curl &lt;span style="color:#e6db74">&amp;#39;https://www.linkedin.com/voyager/api/feed/reactions?count=10&amp;amp;q=reactionType&amp;amp;start=70&amp;amp;threadUrn=urn:li:activity:XXXXX614171169XXXXX&amp;#39;&lt;/span> &lt;span style="color:#ae81ff">\
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-shell" data-lang="shell">curl &lt;span style="color:#e6db74">&amp;#39;https://www.linkedin.com/voyager/api/feed/reactions?count=10&amp;amp;q=reactionType&amp;amp;start=70&amp;amp;threadUrn=urn:li:activity:XXXXX614171169XXXXX&amp;#39;&lt;/span> &lt;span style="color:#ae81ff">\
 &lt;/span>&lt;span style="color:#ae81ff">&lt;/span> -H &lt;span style="color:#e6db74">&amp;#39;...&amp;#39;&lt;/span> &lt;span style="color:#ae81ff">\
 &lt;/span>&lt;span style="color:#ae81ff">&lt;/span> --compressed
 &lt;/code>&lt;/pre>&lt;/div>&lt;p>Realmente esperei que seria algo mais complexo, mas o LinkedIn facilita bastante, já que sua API RESTful fornece o &lt;em>endpoint&lt;/em> &lt;code>reactions&lt;/code> de fácil acesso a qualquer usuário, claro que no cabeçalho da requisiçao, existia minha sessão, que por motivos óbvios, acabei removendo-a para evitar problemas com os amigos &lt;em>h4x05s&lt;/em>.&lt;/p>
@@ -271,11 +271,11 @@ pluginsPagesUniq.ForEach(l =&amp;gt; downloadPluginTasks.Add(DownloadPluginAsync
 &lt;p>&lt;img src="https://exception.blog/static/image-20210314200041144.png" alt="O dataset formado">&lt;/p>
 &lt;p>Para simpliificar, e não fazer diversas requisições ao &lt;em>backend&lt;/em> do LinkedIn, escolhi aleatóriamente 1064 pessoas daquela postagem. Por fim o código em C# ficou uma bagunça, mas cumpriu seu propósito de forma majestosa, indexando todos esses resultados em apenas alguns segundos - tudo isso pode ser parametrizado através dos parâmetros da própria API da rede social.&lt;/p>
 &lt;p>Um ponto de atenção, é sobre os &lt;em>cookies&lt;/em> necessários para estar autenticado, e também, autorizado dentro do LinkedIn:&lt;/p>
-&lt;div class="highlight">&lt;pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="color:#66d9ef">var&lt;/span> session = &lt;span style="color:#66d9ef">new&lt;/span> CookieContainer();
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="color:#66d9ef">var&lt;/span> session = &lt;span style="color:#66d9ef">new&lt;/span> CookieContainer();
 session.Add(&lt;span style="color:#66d9ef">new&lt;/span> Cookie(&lt;span style="color:#e6db74">&amp;#34;JSESSIONID&amp;#34;&lt;/span>, &lt;span style="color:#e6db74">&amp;#34;...&amp;#34;&lt;/span>, &lt;span style="color:#e6db74">&amp;#34;/&amp;#34;&lt;/span>, &lt;span style="color:#e6db74">&amp;#34;.www.linkedin.com&amp;#34;&lt;/span>));
 session.Add(&lt;span style="color:#66d9ef">new&lt;/span> Cookie(&lt;span style="color:#e6db74">&amp;#34;li_at&amp;#34;&lt;/span>, &lt;span style="color:#e6db74">&amp;#34;...&amp;#34;&lt;/span>, &lt;span style="color:#e6db74">&amp;#34;/&amp;#34;&lt;/span>, &lt;span style="color:#e6db74">&amp;#34;.www.linkedin.com&amp;#34;&lt;/span>));
 &lt;/code>&lt;/pre>&lt;/div>&lt;p>Todos os demais &lt;em>cookies&lt;/em> são apenas &lt;em>trackers&lt;/em> ou caso você utilize um provedor de SSO. Para os &lt;em>headers&lt;/em>, para minha surpresa, só é necessário o seguinte:&lt;/p>
-&lt;div class="highlight">&lt;pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="color:#66d9ef">var&lt;/span> reactionsMessage = &lt;span style="color:#66d9ef">new&lt;/span> HttpRequestMessage(HttpMethod.Get, post)
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="color:#66d9ef">var&lt;/span> reactionsMessage = &lt;span style="color:#66d9ef">new&lt;/span> HttpRequestMessage(HttpMethod.Get, post)
 {
 Headers =
 {
@@ -283,7 +283,7 @@ Headers =
 }
 };
 &lt;/code>&lt;/pre>&lt;/div>&lt;p>E claro, configurar adequadamente seu &lt;code>HttpClient&lt;/code> e &lt;code>HttpClientHandler&lt;/code>. Deixei os &lt;em>cookies&lt;/em> apontados para o objeto &lt;code>session&lt;/code>, do primeiro &lt;em>snippet&lt;/em> de código, dessa forma ficou tudo bem organizado da seguinte forma:&lt;/p>
-&lt;div class="highlight">&lt;pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="color:#66d9ef">using&lt;/span> var clientHandler = &lt;span style="color:#66d9ef">new&lt;/span> HttpClientHandler
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="color:#66d9ef">using&lt;/span> var clientHandler = &lt;span style="color:#66d9ef">new&lt;/span> HttpClientHandler
 {
 UseCookies = &lt;span style="color:#66d9ef">true&lt;/span>,
 AllowAutoRedirect = &lt;span style="color:#66d9ef">false&lt;/span>,
@@ -291,19 +291,19 @@ CookieContainer = session
 };
 &lt;span style="color:#66d9ef">using&lt;/span> var client = &lt;span style="color:#66d9ef">new&lt;/span> HttpClient(clientHandler);
 &lt;/code>&lt;/pre>&lt;/div>&lt;p>Depois de tudo isso, veio uma parte meia feia, no que se diz respeito as melhores práticas para nomear os tipos dentro do C#, isso acontece nessa versão do .NET5 por conta da falta de suporte da &lt;em>annotation&lt;/em> &lt;code>JsonPropertyName&lt;/code>, de ser utilizada em &lt;code>record&lt;/code> e também em seus construtores, então para simplificar o código, abstrai apenas os elementos que foram importantes para essa análise:&lt;/p>
-&lt;div class="highlight">&lt;pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="color:#66d9ef">private&lt;/span> record Paging(&lt;span style="color:#66d9ef">int&lt;/span> start, &lt;span style="color:#66d9ef">int&lt;/span> total, &lt;span style="color:#66d9ef">int&lt;/span> count);
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="color:#66d9ef">private&lt;/span> record Paging(&lt;span style="color:#66d9ef">int&lt;/span> start, &lt;span style="color:#66d9ef">int&lt;/span> total, &lt;span style="color:#66d9ef">int&lt;/span> count);
 &lt;span style="color:#66d9ef">private&lt;/span> record description(&lt;span style="color:#66d9ef">string&lt;/span> text);
 &lt;span style="color:#66d9ef">private&lt;/span> record name(&lt;span style="color:#66d9ef">string&lt;/span> text);
 &lt;span style="color:#66d9ef">private&lt;/span> record Element(&lt;span style="color:#66d9ef">string&lt;/span> reactionType, description description, name name);
 &lt;/code>&lt;/pre>&lt;/div>&lt;p>De certa forma ficou simples, porém dava para ter feito melhor. Com as limitações da &lt;code>System.Text.Json&lt;/code>, acredito que por enquanto, esse seria o mais minificado que conseguiria chegar por enquanto. Para realizar o &lt;em>parsing&lt;/em> do JSON que é respondido, fiz algo bem simples - mas sentindo muita falta da simplicidade de tratar tipos de forma dinâmica, igual temos na NewtonSoftware, mas como sempre prefiro fazer sem utilizar nada além da &lt;em>std&lt;/em>, acho que está de bom tamanho:&lt;/p>
-&lt;div class="highlight">&lt;pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="color:#66d9ef">var&lt;/span> content = &lt;span style="color:#66d9ef">await&lt;/span> response.Content.ReadAsStringAsync();
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="color:#66d9ef">var&lt;/span> content = &lt;span style="color:#66d9ef">await&lt;/span> response.Content.ReadAsStringAsync();
 &lt;span style="color:#66d9ef">var&lt;/span> payload = JsonSerializer.Deserialize&amp;lt;JsonElement&amp;gt;(content);
 &lt;span style="color:#66d9ef">var&lt;/span> paging = JsonSerializer.Deserialize&amp;lt;Paging&amp;gt;(payload.GetProperty(&lt;span style="color:#e6db74">&amp;#34;paging&amp;#34;&lt;/span>).GetRawText());
 &lt;span style="color:#66d9ef">if&lt;/span> (paging == &lt;span style="color:#66d9ef">null&lt;/span>) &lt;span style="color:#66d9ef">return&lt;/span>;
 &lt;/code>&lt;/pre>&lt;/div>&lt;p>E dessa forma seguimos o &lt;em>parsing&lt;/em> para os demais &lt;code>record&lt;/code>:&lt;/p>
-&lt;div class="highlight">&lt;pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-c#" data-lang="c#">&lt;span style="color:#66d9ef">var&lt;/span> elements = JsonSerializer.Deserialize&amp;lt;List&amp;lt;Element&amp;gt;&amp;gt;(payload.GetProperty(&lt;span style="color:#e6db74">&amp;#34;elements&amp;#34;&lt;/span>).GetRawText());
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-c#" data-lang="c#">&lt;span style="color:#66d9ef">var&lt;/span> elements = JsonSerializer.Deserialize&amp;lt;List&amp;lt;Element&amp;gt;&amp;gt;(payload.GetProperty(&lt;span style="color:#e6db74">&amp;#34;elements&amp;#34;&lt;/span>).GetRawText());
 &lt;/code>&lt;/pre>&lt;/div>&lt;p>Na verdade todos eles estão referenciados explicitamente pelo &lt;code>Element&lt;/code>, dessa forma, basta iterar sobre a lista e colher os dados que julgar necessário. No meu caso imprimi na tela, conforme nas primeiras imagens, para ter uma noção de como as coisas estavam funcionando:&lt;/p>
-&lt;div class="highlight">&lt;pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-c#" data-lang="c#">elements.ForEach(e =&amp;gt;
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-c#" data-lang="c#">elements.ForEach(e =&amp;gt;
 {
 &lt;span style="color:#66d9ef">if&lt;/span> (e == &lt;span style="color:#66d9ef">null&lt;/span>) &lt;span style="color:#66d9ef">return&lt;/span>;
 &lt;span style="color:#66d9ef">if&lt;/span> (e.name != &lt;span style="color:#66d9ef">null&lt;/span> &amp;amp;&amp;amp; !&lt;span style="color:#66d9ef">string&lt;/span>.IsNullOrEmpty(e.name.text))
@@ -321,11 +321,11 @@ Console.WriteLine(&lt;span style="color:#e6db74">$&amp;#34; &amp;gt; Type: {e.re
 });
 &lt;/code>&lt;/pre>&lt;/div>&lt;p>Ainda que não temos algo dinâmico, as referênciais internas dos &lt;code>record&lt;/code> ainda podem ser traiçoeiras se acessadas diretamente, como tentar navegar diretamente para &lt;code>e.name.text&lt;/code>, que pode resultar em uma referência nula dentro do escopo de execução, por isso temos também a validação de &lt;code>e.name != null&lt;/code>.&lt;/p>
 &lt;p>Depois disso tudo, só utilizo um &lt;code>Distinct()&lt;/code> e indexo todo o resultado em um &lt;code>.csv&lt;/code>:&lt;/p>
-&lt;div class="highlight">&lt;pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="color:#66d9ef">await&lt;/span> File.WriteAllLinesAsync(&lt;span style="color:#e6db74">&amp;#34;result.csv&amp;#34;&lt;/span>, textToWrite.Distinct().ToList());
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-csharp" data-lang="csharp">&lt;span style="color:#66d9ef">await&lt;/span> File.WriteAllLinesAsync(&lt;span style="color:#e6db74">&amp;#34;result.csv&amp;#34;&lt;/span>, textToWrite.Distinct().ToList());
 &lt;/code>&lt;/pre>&lt;/div>&lt;p>E tudo isso vai ter como produto, o que vamos utilizar para analisar de forma mais profunda os dados, de quem gosta mais de &lt;code>X&lt;/code> ou &lt;code>Y&lt;/code>.&lt;/p>
 &lt;h1 id="quem-é-quem">Quem é quem?&lt;/h1>
 &lt;p>Vamos analisar brevemente os dados produzidos. Para simplificar, realizei a conversão desse &lt;code>.csv&lt;/code> para um &lt;code>.sqlite&lt;/code> (poderia ter utilizado algo mais simples com &lt;code>pandas&lt;/code>) e consumindo os resultados pela própria &lt;em>shell&lt;/em> do &lt;code>sqlite3&lt;/code>:&lt;/p>
-&lt;pre>&lt;code class="language-sqlite" data-lang="sqlite">sqlite&amp;gt; .schema
+&lt;pre tabindex="0">&lt;code class="language-sqlite" data-lang="sqlite">sqlite&amp;gt; .schema
 CREATE TABLE CRAW(
 &amp;quot;NAME&amp;quot; TEXT,
 &amp;quot;ROLE&amp;quot; TEXT,
@@ -339,12 +339,12 @@ sqlite&amp;gt; SELECT COUNT() FROM CRAW;
 &lt;li>À favor do Lula: Quem possívelmente teve sua reação como sendo &lt;code>EMPATHY&lt;/code>.&lt;/li>
 &lt;/ul>
 &lt;p>Com isso em pauta, vamos olhar a quantidade de pessoas que votaram em cada uma das figuras políticas:&lt;/p>
-&lt;pre>&lt;code class="language-sqlite" data-lang="sqlite">sqlite&amp;gt; SELECT COUNT() FROM CRAW WHERE REACTION = &amp;quot;EMPATHY&amp;quot;;
+&lt;pre tabindex="0">&lt;code class="language-sqlite" data-lang="sqlite">sqlite&amp;gt; SELECT COUNT() FROM CRAW WHERE REACTION = &amp;quot;EMPATHY&amp;quot;;
 319
 sqlite&amp;gt; SELECT COUNT() FROM CRAW WHERE REACTION = &amp;quot;LIKE&amp;quot;;
 668
 &lt;/code>&lt;/pre>&lt;p>Nesse &lt;em>dataset&lt;/em> que colhi da postagem, chegamos ao total de 319 votos à favor do Lula, e 668 votos para o Bolsonaro. Porém, da mesma forma que podemos apenas realizar um &lt;code>COUNT()&lt;/code>, também podemos olhar apenas para os nomes de quem possívelmente prefere governo &lt;code>X&lt;/code> ou &lt;code>Y&lt;/code>, começando pelo candidato de direita:&lt;/p>
-&lt;pre>&lt;code class="language-sqlite" data-lang="sqlite">sqlite&amp;gt; SELECT NAME FROM CRAW WHERE REACTION = &amp;quot;LIKE&amp;quot; LIMIT 10;
+&lt;pre tabindex="0">&lt;code class="language-sqlite" data-lang="sqlite">sqlite&amp;gt; SELECT NAME FROM CRAW WHERE REACTION = &amp;quot;LIKE&amp;quot; LIMIT 10;
 NADINE JUNKES
 MATHEUS CHAGAS
 BRUNO JARED CRUZ
@@ -356,7 +356,7 @@ JEFFERSON J.
 SARA ELAINE LOPES PEREIRA
 MÁRCIO ROSA
 &lt;/code>&lt;/pre>&lt;p>E por fim, Lula:&lt;/p>
-&lt;pre>&lt;code class="language-sqlite" data-lang="sqlite">sqlite&amp;gt; SELECT NAME FROM CRAW WHERE REACTION = &amp;quot;EMPATHY&amp;quot; LIMIT 10;
+&lt;pre tabindex="0">&lt;code class="language-sqlite" data-lang="sqlite">sqlite&amp;gt; SELECT NAME FROM CRAW WHERE REACTION = &amp;quot;EMPATHY&amp;quot; LIMIT 10;
 ANA CECÍLIA MACHADO
 GIOVANNA DUARTE ALMEIDA
 LUCAS CATTA PRÊTA
