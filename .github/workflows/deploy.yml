@@ -2,6 +2,7 @@ name: Build and Deploy
 on: [push]
 jobs:
   build-and-deploy:
+    concurrency: ci-${{ github.ref }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout 🛎️
@@ -9,11 +10,11 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Update Theme 🔧 
+      - name: Update Theme 🔧
         run: git submodule update --init --recursive
 
       - name: Setup Hugo 🔧
-        run: | 
+        run: |
           sudo apt update
           wget ${{ secrets.HUGO_RELEASE }} -O hugo.deb
           sudo dpkg -i hugo.deb
@@ -26,9 +27,8 @@ jobs:
         run: hugo -D --minify
 
       - name: Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@3.7.1
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-          BRANCH: gh-pages
-          FOLDER: public
-          CLEAN: true 
+          branch: gh-pages
+          folder: public
+          clean: true
