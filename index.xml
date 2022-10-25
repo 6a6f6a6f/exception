@@ -19,6 +19,7 @@ Meu objetivo, além de claro, criar Darci, também é desenvolver um parser de M
 &lt;/li>
 &lt;li>&lt;em>Syntax highlighting&lt;/em> é algo que não considero crucial, tendo em vista que posso utilizar o Gist por enquanto;&lt;/li>
 &lt;li>No demais, ser bem fácil de migrar para quem gosta do Hugo, e só quer fazer um blog igual esse;&lt;/li>
+&lt;li>Ter o próprio &lt;em>parser&lt;/em> de Markdown, bem como assegurar que o código-fonte do site sempre tenha o Markdown bem formatado;&lt;/li>
 &lt;li>&lt;strong>Ser simples.&lt;/strong>&lt;/li>
 &lt;/ul>
 &lt;blockquote>
@@ -29,8 +30,23 @@ Meu objetivo, além de claro, criar Darci, também é desenvolver um parser de M
 &lt;p>A única interface com Darci vai ser a linha de comando, e nesse quesito é sempre bom fazermos algo de qualidade e de boa usabilidade. A minha biblioteca favorita para escrever ferramentas de linha de comando é o &lt;a href="https://github.com/spectreconsole/spectre.console">&lt;code>spectreconsole/spectre.console&lt;/code>&lt;/a> do meu grande amigo &lt;a href="https://twitter.com/firstdrafthell">@firstdrafthell&lt;/a>, que realmente considero melhor que a oficial do dotnet, ainda que não siga muita coisa de como deve ser feita CLIs, mas sim pelas capacidades maravilhosas de simplesmente escrever bonito na tela.&lt;/p>
 &lt;p>Bom, esse problema é sério, e não consigo contorna-lo por conta de um dos meus requerimentos para tornar Darci uma realidade, não utilizar nada além do &lt;code>std&lt;/code> do dotnet, e infelizmente, isso inclue todas as bibliotecas que fazem a minha vida mais fácil. E por esse motivo, quero tentar projetar um &lt;em>parser&lt;/em> de linha de comando bem simples, porém eficaz, que preencha as necessidades que tenho em mente para fazer Darci dar seus primeiros passos:&lt;/p>
 &lt;ul>
-&lt;li>&lt;code>new&lt;/code> ou &lt;code>n&lt;/code>: Criar uma nova estrutura de site para Darci;&lt;/li>
-&lt;li>&lt;code>build&lt;/code>, &lt;code>b&lt;/code> ou um &lt;em>prompt&lt;/em> vaziu: Realizar o &lt;em>release&lt;/em> do site.&lt;/li>
+&lt;li>&lt;code>new&lt;/code> ou &lt;code>n&lt;/code> seguido de um argumento positicional opcional &lt;code>&amp;lt;name&amp;gt;&lt;/code>: Criar uma nova estrutura de site para Darci;
+&lt;ul>
+&lt;li>&lt;code>post &amp;lt;!title|name&amp;gt;&lt;/code>: Um post dentro de um determinado site;&lt;/li>
+&lt;li>&lt;code>page &amp;lt;!title|name&amp;gt;&lt;/code>: Uma página dentro de um determinado site.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;code>build&lt;/code>, &lt;code>b&lt;/code> ou um &lt;em>prompt&lt;/em> vaziu: Realizar o &lt;em>release&lt;/em> do site.
+&lt;ul>
+&lt;li>&lt;code>--watch&lt;/code> ou &lt;code>-w&lt;/code>: Ficar de olho no &lt;em>filesystem&lt;/em> e ir gerando de acordo.&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;p>Alguns exemplos seria:&lt;/p>
+&lt;ul>
+&lt;li>Criar um novo blog: &lt;code>darci new &amp;quot;Protozoários Canibais&amp;quot;&lt;/code>;&lt;/li>
+&lt;li>Criar uma nova página: &lt;code>darci new page &amp;quot;Fundadores da Nova Ordem&amp;quot;&lt;/code>;&lt;/li>
+&lt;li>Criar um novo blog: &lt;code>darci new blog &amp;quot;Como criar uma larva explosiva?&amp;quot;&lt;/code>.&lt;/li>
 &lt;/ul>
 &lt;p>Novamente, quero fazer algo muito mais simples que o Hugo, e por consequência, também não vai ser tão poderoso. Mas particularmente acho isso positivo para meu cenário de uso, também por ser um humano dotado de TDAH somado a uma dose de Aspenger.&lt;/p>
 &lt;h2 id="vai-ser-extensível">Vai ser extensível?&lt;/h2>

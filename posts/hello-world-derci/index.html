@@ -3,7 +3,7 @@
 <title>Então nasce Darci :: Jojo's Exceptions</title>
 <meta charset=utf-8>
 <meta name=viewport content="width=device-width,initial-scale=1">
-<meta name=description content="Se existe o Hugo, agora temos Darci, um gerador de sites mais minimalista, sem todos aqueles recursos, e escrito em uma linguagem que não é rápida igual Go, mas vai ser legal, eu acho.">
+<meta name=description content="Se existe o Hugo, agora temos Darci, um gerador de sites mais minimalista, e totalmente orientado a objetos, sem todos aqueles recursos, e escrito em uma linguagem que não é rápida igual Go, mas vai ser legal (eu acho).">
 <meta name=keywords content="darci">
 <meta name=robots content="noodp">
 <link rel=canonical href=https://exception.blog/posts/hello-world-derci/>
@@ -15,7 +15,7 @@
 <meta property="og:locale" content="en">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Então nasce Darci">
-<meta property="og:description" content="Se existe o Hugo, agora temos Darci, um gerador de sites mais minimalista, sem todos aqueles recursos, e escrito em uma linguagem que não é rápida igual Go, mas vai ser legal, eu acho.">
+<meta property="og:description" content="Se existe o Hugo, agora temos Darci, um gerador de sites mais minimalista, e totalmente orientado a objetos, sem todos aqueles recursos, e escrito em uma linguagem que não é rápida igual Go, mas vai ser legal (eu acho).">
 <meta property="og:url" content="https://exception.blog/posts/hello-world-derci/">
 <meta property="og:site_name" content="Jojo's Exceptions">
 <meta property="og:image" content="https://exception.blog/">
@@ -80,6 +80,7 @@ exception
 </li>
 <li><em>Syntax highlighting</em> é algo que não considero crucial, tendo em vista que posso utilizar o Gist por enquanto;</li>
 <li>No demais, ser bem fácil de migrar para quem gosta do Hugo, e só quer fazer um blog igual esse;</li>
+<li>Ter o próprio <em>parser</em> de Markdown, bem como assegurar que o código-fonte do site sempre tenha o Markdown bem formatado;</li>
 <li><strong>Ser simples.</strong></li>
 </ul>
 <blockquote>
@@ -90,8 +91,23 @@ exception
 <p>A única interface com Darci vai ser a linha de comando, e nesse quesito é sempre bom fazermos algo de qualidade e de boa usabilidade. A minha biblioteca favorita para escrever ferramentas de linha de comando é o <a href=https://github.com/spectreconsole/spectre.console><code>spectreconsole/spectre.console</code></a> do meu grande amigo <a href=https://twitter.com/firstdrafthell>@firstdrafthell</a>, que realmente considero melhor que a oficial do dotnet, ainda que não siga muita coisa de como deve ser feita CLIs, mas sim pelas capacidades maravilhosas de simplesmente escrever bonito na tela.</p>
 <p>Bom, esse problema é sério, e não consigo contorna-lo por conta de um dos meus requerimentos para tornar Darci uma realidade, não utilizar nada além do <code>std</code> do dotnet, e infelizmente, isso inclue todas as bibliotecas que fazem a minha vida mais fácil. E por esse motivo, quero tentar projetar um <em>parser</em> de linha de comando bem simples, porém eficaz, que preencha as necessidades que tenho em mente para fazer Darci dar seus primeiros passos:</p>
 <ul>
-<li><code>new</code> ou <code>n</code>: Criar uma nova estrutura de site para Darci;</li>
-<li><code>build</code>, <code>b</code> ou um <em>prompt</em> vaziu: Realizar o <em>release</em> do site.</li>
+<li><code>new</code> ou <code>n</code> seguido de um argumento positicional opcional <code>&lt;name></code>: Criar uma nova estrutura de site para Darci;
+<ul>
+<li><code>post &lt;!title|name></code>: Um post dentro de um determinado site;</li>
+<li><code>page &lt;!title|name></code>: Uma página dentro de um determinado site.</li>
+</ul>
+</li>
+<li><code>build</code>, <code>b</code> ou um <em>prompt</em> vaziu: Realizar o <em>release</em> do site.
+<ul>
+<li><code>--watch</code> ou <code>-w</code>: Ficar de olho no <em>filesystem</em> e ir gerando de acordo.</li>
+</ul>
+</li>
+</ul>
+<p>Alguns exemplos seria:</p>
+<ul>
+<li>Criar um novo blog: <code>darci new "Protozoários Canibais"</code>;</li>
+<li>Criar uma nova página: <code>darci new page "Fundadores da Nova Ordem"</code>;</li>
+<li>Criar um novo blog: <code>darci new blog "Como criar uma larva explosiva?"</code>.</li>
 </ul>
 <p>Novamente, quero fazer algo muito mais simples que o Hugo, e por consequência, também não vai ser tão poderoso. Mas particularmente acho isso positivo para meu cenário de uso, também por ser um humano dotado de TDAH somado a uma dose de Aspenger.</p>
 <h2 id=vai-ser-extensível>Vai ser extensível?<a href=#vai-ser-extensível class=hanchor arialabel=Anchor>&#8983;</a> </h2>
