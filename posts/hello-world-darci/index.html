@@ -1,0 +1,133 @@
+<!doctype html><html lang=en>
+<head>
+<title>Então nasce Darci :: Jojo's Exceptions</title>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=description content="Se existe o Hugo, agora temos Darci, um gerador de sites mais minimalista, e totalmente orientado a objetos, sem todos aqueles recursos, e escrito em uma linguagem que não é rápida igual Go, mas vai ser legal (eu acho).">
+<meta name=keywords content="darci">
+<meta name=robots content="noodp">
+<link rel=canonical href=https://exception.blog/posts/hello-world-darci/>
+<link rel=stylesheet href=https://exception.blog/assets/style.css>
+<link rel=stylesheet href=https://exception.blog/assets/red.css>
+<link rel=apple-touch-icon href=https://exception.blog/img/apple-touch-icon-192x192.png>
+<link rel="shortcut icon" href=https://exception.blog/favicon.png>
+<meta name=twitter:card content="summary">
+<meta property="og:locale" content="en">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Então nasce Darci">
+<meta property="og:description" content="Se existe o Hugo, agora temos Darci, um gerador de sites mais minimalista, e totalmente orientado a objetos, sem todos aqueles recursos, e escrito em uma linguagem que não é rápida igual Go, mas vai ser legal (eu acho).">
+<meta property="og:url" content="https://exception.blog/posts/hello-world-darci/">
+<meta property="og:site_name" content="Jojo's Exceptions">
+<meta property="og:image" content="https://exception.blog/">
+<meta property="og:image:width" content="2048">
+<meta property="og:image:height" content="1024">
+<meta property="article:published_time" content="2022-10-24 23:46:28 -0300 -0300">
+</head>
+<body class=red>
+<div class="container center headings--one-size">
+<header class=header>
+<div class=header__inner>
+<div class=header__logo>
+<a href=/>
+<div class=logo>
+exception
+</div>
+</a>
+</div>
+<div class=menu-trigger>menu</div>
+</div>
+<nav class=menu>
+<ul class="menu__inner menu__inner--desktop">
+<li><a href=/about>whois</a></li>
+</ul>
+<ul class="menu__inner menu__inner--mobile">
+<li><a href=/about>whois</a></li>
+</ul>
+</nav>
+</header>
+<div class=content>
+<div class=post>
+<h1 class=post-title>
+<a href=https://exception.blog/posts/hello-world-darci/>Então nasce Darci</a></h1>
+<div class=post-meta>
+<span class=post-date>
+2022-10-24
+</span>
+<span class=post-author>:: Jojo</span>
+</div>
+<span class=post-tags>
+#<a href=https://exception.blog/tags/research/>research</a>&nbsp;
+#<a href=https://exception.blog/tags/development/>development</a>&nbsp;
+</span>
+<div class=post-content><div>
+<h2 id=isso-é-inventar-a-roda>Isso é inventar a roda?<a href=#isso-é-inventar-a-roda class=hanchor arialabel=Anchor>&#8983;</a> </h2>
+<p>Acho seriamente que quando essa moda pegar vai ser o novo &ldquo;<em>olha fiz a interface do NuBank em <code>$STACK_NAME</code></em>&rdquo;, mas nesse caso, acredito que não vai ser mais do mesmo, tendo em vista que vou passar por uma dor de cabeça mais <em>hardcore</em>.</p>
+<p>Meu objetivo, além de claro, criar Darci, também é desenvolver um parser de Markdown para HTML bem minimalista, rápido, e potencialmente seguro — sim, <em>hackers love parsers!</em>, e tenho certeza de alguém vai conseguir achar uma vulnerabilidade no meu <em>parser</em>, vou ficar muito feliz em corrigi-la!</p>
+<p>Além disso, tenho alguns objetivos em mente na hora de confeccionar Darci, sendo esses os que mais considero importantes:</p>
+<ul>
+<li>Tudo sem classe no lado do front-end;
+<ul>
+<li>Quero fazer ou utilizar algo como o <a href=https://github.com/tbolt/boltcss><code>tbolt/boltcss</code></a>.</li>
+</ul>
+</li>
+<li>Não utilizar bibliotecas de nenhum tipo, apenas o que há de existente no dotnet (nem te contei né? Pois é, vai ser em C#);</li>
+<li>Vai ter que ser em dotnet 7 por conta do compilador AOT, que finalmente não é um recurso exclusivo apenas do Blazor;</li>
+<li>Quero tentar abstrair tudo em uma estrutura orientada a objetos, afinal de contas, não há motivo para não o fazer;</li>
+<li>A interface vai ser extremamente minimalista, digna do console dos carros da Tesla;
+<ul>
+<li>O mesmo vale para tipografia, algo monoespaçado e simples.</li>
+</ul>
+</li>
+<li><em>Syntax highlighting</em> é algo que não considero crucial, tendo em vista que posso utilizar o Gist por enquanto;</li>
+<li>No demais, ser bem fácil de migrar para quem gosta do Hugo, e só quer fazer um blog igual esse;</li>
+<li>Ter o próprio <em>parser</em> de Markdown, bem como assegurar que o código-fonte do site sempre tenha o Markdown bem formatado;</li>
+<li><strong>Ser simples.</strong></li>
+</ul>
+<blockquote>
+<p><strong>Disclaimer</strong>: Esse projeto nunca vai ser um substituto para o Hugo, nem coisa de qualquer outro gerador de sites.</p>
+</blockquote>
+<p>Com certeza novas ideias vão surgir na minha cabeça enquanto vou escrevendo código e pensando melhor nos requerimentos para escrever um <del>bom</del> software, por tanto não se prenda nesse texto, você pode verificar se houve muitas alterações desse esboço lá no repositório do blog no meu GitHub.</p>
+<h2 id=como-imagino-a-cli>Como imagino a CLI?<a href=#como-imagino-a-cli class=hanchor arialabel=Anchor>&#8983;</a> </h2>
+<p>A única interface com Darci vai ser a linha de comando, e nesse quesito é sempre bom fazermos algo de qualidade e de boa usabilidade. A minha biblioteca favorita para escrever ferramentas de linha de comando é o <a href=https://github.com/spectreconsole/spectre.console><code>spectreconsole/spectre.console</code></a> do meu grande amigo <a href=https://twitter.com/firstdrafthell>@firstdrafthell</a>, que realmente considero melhor que a oficial do dotnet, ainda que não siga muita coisa de como deve ser feita CLIs, mas sim pelas capacidades maravilhosas de simplesmente escrever bonito na tela.</p>
+<p>Bom, esse problema é sério, e não consigo contorna-lo por conta de um dos meus requerimentos para tornar Darci uma realidade, não utilizar nada além do <code>std</code> do dotnet, e infelizmente, isso inclue todas as bibliotecas que fazem a minha vida mais fácil. E por esse motivo, quero tentar projetar um <em>parser</em> de linha de comando bem simples, porém eficaz, que preencha as necessidades que tenho em mente para fazer Darci dar seus primeiros passos:</p>
+<ul>
+<li><code>new</code> ou <code>n</code> seguido de um argumento positicional opcional <code>&lt;name></code>: Criar uma nova estrutura de site para Darci;
+<ul>
+<li><code>post &lt;!title|name></code>: Um post dentro de um determinado site;</li>
+<li><code>page &lt;!title|name></code>: Uma página dentro de um determinado site.</li>
+</ul>
+</li>
+<li><code>build</code>, <code>b</code> ou um <em>prompt</em> vazio: Realizar o <em>release</em> do site.
+<ul>
+<li><code>--watch</code> ou <code>-w</code>: Ficar de olho no <em>filesystem</em> e ir gerando de acordo.</li>
+</ul>
+</li>
+</ul>
+<p>Alguns exemplos seria:</p>
+<ul>
+<li>Criar um novo blog: <code>darci new "Protozoários Canibais"</code>;</li>
+<li>Criar uma nova página: <code>darci new page "Fundadores da Nova Ordem"</code>;</li>
+<li>Criar um novo blog: <code>darci new blog "Como criar uma larva explosiva?"</code>.</li>
+</ul>
+<p>Novamente, quero fazer algo muito mais simples que o Hugo, e por consequência, também não vai ser tão poderoso. Mas particularmente acho isso positivo para meu cenário de uso, também por ser um humano dotado de TDAH somado a uma dose de Aspenger.</p>
+<h2 id=vai-ser-extensível>Vai ser extensível?<a href=#vai-ser-extensível class=hanchor arialabel=Anchor>&#8983;</a> </h2>
+<p>Olha, essa é uma boa pergunta, mas a resposta é provavelmente não. Meu objetivo é fazer algo realmente simples, que tem apenas um propósito também de mesma simplicidade: Gerar blogs para programadores, pesquisadores ou qualquer outra pessoa que goste de escrever coisas e utilizar outra coisa para fazer isso virar um grande blob de HTML bem simples e subir para seu respectivo servidor web ou ter seu <em>deploy</em> realizado por um arquivo de configuração.</p>
+<p>Tornar muita coisa extensível pode causar problemas em manter a simplicidade, e acaba que esse tudo o que mais tenho interesse, é tornar a ferramenta simples, e sem outras resposabildiades (como ter seu próprio servidor web imbutido ou um complexo sistema de temas).</p>
+<h2 id=enfim-como-vai-acontecer-o-projeto>Enfim, como vai acontecer o projeto?<a href=#enfim-como-vai-acontecer-o-projeto class=hanchor arialabel=Anchor>&#8983;</a> </h2>
+<p>Por enquanto vou soltando as novidades por aqui, o repositório em meu GitHub permanece privado até ter de fato uma primeira <em>release</em> estável da ideia. Agora, se quiser ajudar a colaborar, me envie uma mensagem lá no Keybase que compartilho um <em>invite</em> para ajudar no desenvolvimento de Darci.</p>
+</div></div>
+</div>
+</div>
+<footer class=footer>
+<div class=footer__inner>
+<div class=copyright>
+<span>© 2022 Powered by <a href=http://gohugo.io>Hugo</a></span>
+<span>:: Theme made by <a href=https://twitter.com/panr>panr</a></span>
+</div>
+</div>
+</footer>
+<script src=https://exception.blog/assets/main.js></script>
+<script src=https://exception.blog/assets/prism.js></script>
+</div>
+</body>
+</html>
