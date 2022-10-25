@@ -1,2 +1,6 @@
+# Hugo Specific
 public/
 _gen/
+
+# Visual Studio Code
+.vscode/
