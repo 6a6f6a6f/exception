@@ -1,32 +1,32 @@
 baseurl = "https://exception.blog/"
-languageCode = "en-us"
+languageCode = "pt-br"
 theme = "terminal"
 paginate = 5
 
 [params]
-  contentTypeName = "posts"
-  themeColor = "red"
-  showMenuItems = 2
-  fullWidthTheme = false
-  centerTheme = true
-  favicon = "favicon.png"
+contentTypeName = "posts"
+themeColor = "red"
+showMenuItems = 2
+fullWidthTheme = false
+centerTheme = true
+favicon = "favicon.png"
 
 [languages]
-  [languages.en]
-    title = "Jojo's Exceptions"
-    subtitle = "My thoughts about really general stuff"
-    keywords = ""
-    copyright = ""
-    menuMore = "Show more"
-    readMore = "Read more"
-    readOtherPosts = "Read other posts"
+[languages.en]
+title = "Jojo's Exceptions"
+subtitle = "Meus surtos e momentos de coerência."
+keywords = ""
+copyright = ""
+menuMore = "Ver mais"
+readMore = "Ler mais"
+readOtherPosts = "Mais groselha"
 
-    [languages.en.params.logo]
-      logoText = "exception"
-      logoHomeLink = "/"
+[languages.en.params.logo]
+logoText = "exception"
+logoHomeLink = "/"
 
-    [languages.en.menu]
-      [[languages.en.menu.main]]
-        identifier = "whois"
-        name = "whois"
-        url = "/about"
+[languages.en.menu]
+[[languages.en.menu.main]]
+identifier = "whois"
+name = "whois"
+url = "/about"
