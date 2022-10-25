@@ -6,7 +6,7 @@ authorTwitter = "6a6f6a6f"
 cover = ""
 tags = ["research", "development"]
 keywords = ["darci"]
-description = "Se existe o Hugo, agora temos Darci, um gerador de sites mais minimalista, sem todos aqueles recursos, e escrito em uma linguagem que não é rápida igual Go, mas vai ser legal, eu acho."
+description = "Se existe o Hugo, agora temos Darci, um gerador de sites mais minimalista, e totalmente orientado a objetos, sem todos aqueles recursos, e escrito em uma linguagem que não é rápida igual Go, mas vai ser legal (eu acho)."
 showFullContent = false
 +++
 
@@ -27,6 +27,7 @@ Além disso, tenho alguns objetivos em mente na hora de confeccionar Darci, send
   - O mesmo vale para tipografia, algo monoespaçado e simples.
 - *Syntax highlighting* é algo que não considero crucial, tendo em vista que posso utilizar o Gist por enquanto;
 - No demais, ser bem fácil de migrar para quem gosta do Hugo, e só quer fazer um blog igual esse;
+- Ter o próprio *parser* de Markdown, bem como assegurar que o código-fonte do site sempre tenha o Markdown bem formatado;
 - **Ser simples.**
 
 > **Disclaimer**: Esse projeto nunca vai ser um substituto para o Hugo, nem coisa de qualquer outro gerador de sites.
@@ -39,8 +40,17 @@ A única interface com Darci vai ser a linha de comando, e nesse quesito é semp
 
 Bom, esse problema é sério, e não consigo contorna-lo por conta de um dos meus requerimentos para tornar Darci uma realidade, não utilizar nada além do `std` do dotnet, e infelizmente, isso inclue todas as bibliotecas que fazem a minha vida mais fácil. E por esse motivo, quero tentar projetar um *parser* de linha de comando bem simples, porém eficaz, que preencha as necessidades que tenho em mente para fazer Darci dar seus primeiros passos:
 
-- `new` ou `n`: Criar uma nova estrutura de site para Darci;
+- `new` ou `n` seguido de um argumento positicional opcional `<name>`: Criar uma nova estrutura de site para Darci;
+  - `post <!title|name>`: Um post dentro de um determinado site;
+  - `page <!title|name>`: Uma página dentro de um determinado site.
 - `build`, `b` ou um *prompt* vaziu: Realizar o *release* do site.
+  - `--watch` ou `-w`: Ficar de olho no *filesystem* e ir gerando de acordo.
+
+Alguns exemplos seria:
+
+- Criar um novo blog: `darci new "Protozoários Canibais"`;
+- Criar uma nova página: `darci new page "Fundadores da Nova Ordem"`;
+- Criar um novo blog: `darci new blog "Como criar uma larva explosiva?"`.
 
 Novamente, quero fazer algo muito mais simples que o Hugo, e por consequência, também não vai ser tão poderoso. Mas particularmente acho isso positivo para meu cenário de uso, também por ser um humano dotado de TDAH somado a uma dose de Aspenger.
 
